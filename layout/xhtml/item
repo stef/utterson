@@ -1,0 +1,15 @@
+<div class="hentry">
+  <h2>
+     <a href="POSTURL" title="Permalink" rel="bookmark">
+        <span class="entry-title">POSTTITLE</span>
+     </a>
+  </h2>
+  <h3><span class="outleft"><abbr class="updated" title="POSTUPDATED">POSTUPDATEDSHORT</abbr></span></h3>
+  <div class="entry-content">
+  POSTCONTENT
+  </div>
+  <div>
+  <p><a href="POSTURL" title="Permalink" rel="bookmark" style="font-size: 50%; text-align: right;">permalink</a></p>
+  </div>
+  <hr style="background-color: #000; height: 2px; margin-bottom: 2em; margin-top: 2em;"/>
+</div>

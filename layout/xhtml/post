@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+ <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+ <meta http-equiv="Content-Language" content="hu_HU" />
+ <meta http-equiv="imagetoolbar" content="false" />
+ <meta name="description" content="BLOGDESC" />
+ <meta name="viewport" content="width=800" />
+ <meta name="DC.title" content="PAGETITLE" />
+ <meta name="DC.subject" content="copyright culture development europe freedom freesoftware government history hungarian innovation internet" />
+ <meta name="DC.creator" content="Stefan Marsiske" />
+ <link rel="Shortcut Icon" href="~stef/favicon.png" type="image/png" />
+ <link rel="stylesheet" type="text/css" href="../main.css" />
+ <link rel="alternate" href="BASEURL/atom.xml" type="application/atom+xml" title="BLOGTITLE" charset="utf-8" />
+ <link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/" />
+ <title>PAGETITLE</title>
+ </head><body>
+<div id="main">
+<div id="hover">
+<h1><a href="BASEURL/" title="Link to top level">BLOGTITLE</a></h1>
+<ul id="tnav">
+ <li><a href="BASEURL/" title="About this site">Home</a></li>
+ <li><a href="BASEURL/about" title="About this site">About</a></li>
+ <li><a href="BASEURL/atom" title="Receive updates in your feed reader">Feed</a></li>
+</ul><br style="clear: both;"></br>
+</div>
+<div class="hfeed">
+<div class="hentry">
+  <h2>
+     <a href="BASEURL/POSTURL" title="Permalink" rel="bookmark">
+        <span class="entry-title">POSTTITLE</span>
+     </a>
+  </h2>
+  <h3><span class="outleft"><abbr class="updated" title="POSTUPDATED">POSTUPDATEDSHORT</abbr></span></h3>
+  <div class="entry-content">
+  POSTCONTENT
+  </div>
+  <p><a href="POSTURL" title="Permalink" rel="bookmark" style="font-size: 50%; text-align: right;">permalink</a></p>
+</div>
+</div></div>
+<hr />
+<div style="text-align: center">
+   <img alt="Creative Commons License"
+       style="border-width:0"
+       src="http://i.creativecommons.org/l/by-sa/3.0/us/88x31.png"/>
+   <a href="http://feedvalidator.org/check.cgi?url=BASEURL/atom.xml"><img
+       src="BASEURL/images/valid-atom.png"
+       alt="[Valid Atom 1.0]"
+       title="Validate my Atom 1.0 feed" /></a>
+   <a href="http://validator.w3.org/check?uri=BASEURL/POSTURL"><img
+       src="http://www.w3.org/Icons/valid-xhtml10-blue"
+       alt="Valid XHTML 1.0 Strict" height="31" width="88" /></a>
+</div>
+</body></html>

@@ -1,0 +1,29 @@
+#!/usr/bin/ksh
+
+xmlstarlet sel -T -N wp=http://wordpress.org/export/1.0/ \
+               -N content="http://purl.org/rss/1.0/modules/content/" \
+               -t -m "rss/channel/item[wp:post_type='post']" \
+               -o '$#@NEWPOST' -n  \
+               -o '$#@POSTTITLE: ' -v title -n \
+               -o '$#@POSTPUBLISHED: ' -v pubDate -n \
+               -o '$#@POSTEND' -n |
+   awk '
+      /\$\#\@NEWPOST/ {
+         FILENAME=""
+         POSTED=""
+      }
+      /\$\#\@POSTTITLE/ {
+         $1="";
+         sub(" ","");
+         gsub(/[\"]/, "")
+         FILENAME="posts/"$0".html"
+      }
+      /\$\#\@POSTPUBLISHED/ {
+         $1="";
+         sub(" ","");
+         POSTED=$0
+      }
+      /\$\#\@POSTEND/ {
+         system("touch -d " "\""POSTED"\"" " \""FILENAME"\"");
+      }
+      '

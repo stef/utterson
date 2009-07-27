@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+ <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+ <meta http-equiv="Content-Language" content="hu_HU" />
+ <meta http-equiv="imagetoolbar" content="false" />
+ <meta name="description" content="BLOGDESC" />
+ <meta name="viewport" content="width=800" />
+ <meta name="DC.title" content="BLOGTITLE" />
+ <meta name="DC.subject" content="copyright culture development europe freedom freesoftware government history hungarian innovation internet" />
+ <meta name="DC.creator" content="Stefan Marsiske" />
+ <link rel="Shortcut Icon" href="~stef/favicon.png" type="image/png" />
+ <link rel="stylesheet" type="text/css" href="main.css" />
+ <link rel="alternate" href="BASEURL/atom.xml" type="application/atom+xml" title="BLOGTITLE" charset="utf-8" />
+ <link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/" />
+ <title>BLOGTITLE</title>
+ </head><body>
+<div id="main">
+<div id="hover">
+   <h1><a href="/" title="Link to top level"><img src="BLOGLOGO" style="height: 70px; vertical-align: middle;" alt="logo" />BLOGTITLE</a></h1>
+<ul id="tnav">
+ <li><a href="BASEURL/" title="About this site">Home</a></li>
+ <li><a href="BASEURL/about" title="About this site">About</a></li>
+ <li><a href="BASEURL/atom.xml" title="Receive updates in your feed reader">Feed</a></li>
+</ul><br style="clear: both;"></br>
+</div>
+<div class="hfeed">

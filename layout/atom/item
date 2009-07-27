@@ -1,0 +1,11 @@
+	<entry>
+		<title>POSTTITLE</title>
+		<link rel="alternate" type="text/html" href="POSTURL"/>
+		<updated>POSTUPDATED</updated>
+      <id>BASEURL/POSTURL</id>
+      <author><name>POSTAUTHOR</name></author>
+		<category term="POSTCATEGORY" scheme="http://www.sixapart.com/ns/types#category"/>
+		<content type="html" xml:lang="en" xml:base="http://www.ctrlc.hu/~stef/blog/"><![CDATA[
+      POSTCONTENT
+]]></content>
+	</entry>
