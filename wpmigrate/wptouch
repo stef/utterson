@@ -24,6 +24,6 @@ xmlstarlet sel -T -N wp=http://wordpress.org/export/1.0/ \
          POSTED=$0
       }
       /\$\#\@POSTEND/ {
-         system("touch -d " "\""POSTED"\"" " \""FILENAME"\"");
+         system("touch --no-create -d " "\""POSTED"\"" " \""FILENAME"\"");
       }
       '
