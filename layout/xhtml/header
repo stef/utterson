@@ -21,6 +21,15 @@
  <li><a href="BASEURL/" title="About this site">Home</a></li>
  <li><a href="BASEURL/about" title="About this site">About</a></li>
  <li><a href="BASEURL/atom.xml" title="Receive updates in your feed reader">Feed</a></li>
+ <li>
+   <form action="http://www.google.com/search" name="searchbox" method="get" style="margin-left: 2em;" />
+   <input type="hidden" name="hl" value="en" />
+   <input type="hidden" name="ie" value="utf-8" />
+   <input type="hidden" name="sitesearch" value="www.ctrlc.hu" />
+     <input maxlength="256" size="20" name="q" value="inurl:~stef/blog/" />
+     <input type="submit" value="find" name="btnG" style="font-size:75%;" />
+   </form> 
+ </li>
 </ul><br style="clear: both;"></br>
 </div>
 <div class="hfeed">

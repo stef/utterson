@@ -1,4 +1,5 @@
 #!/usr/bin/ksh
+# takes a worpress xml export on stdin as input
 
 xmlstarlet sel -T -N wp=http://wordpress.org/export/1.0/ \
                -N content="http://purl.org/rss/1.0/modules/content/" \
