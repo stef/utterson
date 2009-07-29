@@ -1,0 +1,6 @@
+   <url>
+      <loc>BASEURL/POSTURL</loc>
+      <lastmod>POSTUPDATEDSHORT</lastmod>
+      <changefreq>CHANGEFREQ</changefreq>
+      <priority>PAGEPRIO</priority>
+   </url>

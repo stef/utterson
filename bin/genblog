@@ -1,0 +1,146 @@
+#!/usr/bin/ksh
+# generates an atomfeed and static html blog pages from
+# posts/*.html files, containing the entry content of the posts, the
+# filename is used as a title, the last modification time as
+# lastupdate.
+#
+# TODO tags, sitemap.xml 4 google, blog search
+
+# blog config
+typeset -A TVARS
+TVARS[BLOGTITLE]="~stef/blog/"
+TVARS[BLOGLOGO]="/~stef/mu.png"
+TVARS[BLOGDESC]="personal ramblings, noone cares about"
+TVARS[BASEURL]="https://www.ctrlc.hu/~stef/blog"
+TVARS[POSTAUTHOR]="s"
+
+### system config
+TVARS[GENBLOGVERSION]="genblog.ksh v0.1"
+BASEDIR=$HOME/other/blog
+ITEMMAX=15
+TMPDIR="$BASEDIR/tmp" # must exist!
+ATOMFILE="atom.xml"
+HTMLFILE="index.html"
+BASEURL=${TVARS[BASEURL]}
+
+#### end of config ####
+
+runtpl() {
+    # runs m4 on the tpl found in ${BASEDIR}/layout/$1/$2, using all
+    # variables in TVARS
+    ( [[ $# -ne 2 ]] ||  [[ ! -r ${BASEDIR}/layout/$1/$2 ]] ) && return
+    typeset -a defines
+
+    # create array of -D parameters to m4
+    for key in ${!TVARS[@]}; do
+        defines[${#defines[@]}]="-D${key}=${TVARS[$key]}"
+    done
+
+    # do template instanciation
+    m4 "${defines[@]}" ${BASEDIR}/layout/$1/$2
+    unset defines # clear those damn defines again
+}
+
+getRFCtime() {
+    # returns the last file update time in an RFC3339 format
+    stat -c "%y" "${@}" | sed 's/.*\([0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}\) \([0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\}\).*\([+-][0-9]\{2\}\).*/\1T\2\3:00/g'
+}
+
+# wp has a nice youtube syntax: [youtube=url], better than always
+# writing the object/embed code by hand
+# maybe we can add some other "plugins" as well.
+filter() {
+    # TODO add vimeo handling as well, see manifeszto.html
+    sed 's/[[]youtube=http:[/][/]www.youtube.com[/]watch[?]v=\(.*\)]/<object type="application\/x-shockwave-flash" data="http:\/\/www.youtube.com\/v\/\1&hl=en" width="640" height="534"><param name="movie" value="http:\/\/www.youtube.com\/v\/\1&hl=en" \/><param name="FlashVars" value="playerMode=embedded" \/><param name="wmode" value="transparent" \/><\/object>/' "$1"
+}
+
+getpostfile() {
+    fname="${1##*/}"
+    echo "${fname// /_}"
+}
+
+dofooter() {
+    # calculates and provides navigation information (next/prev page)
+    # link to newer archives
+    TVARS[NEWERPOSTS]=""
+    [[ $((counter / ITEMMAX)) -eq 1 ]] &&
+        NEXTPAGE="index.html"
+    [[ $((counter / ITEMMAX)) -gt 1 ]] &&
+        NEXTPAGE="page-$(( (counter / ITEMMAX) -1 )).html"
+    [[ -n "${NEXTPAGE}" ]] &&
+        TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$NEXTPAGE\">newer posts</a></div>"
+
+    # link to older archives
+    TVARS[OLDERPOSTS]=""
+    [[ counter -lt $postslen ]] &&
+        TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"page-$(( (counter / ITEMMAX) + 1)).html\">older posts</a></div>"
+
+    # write out footers
+    runtpl xhtml footer >>"${TMPDIR}/${HTMLFILE}"
+    [[ $((counter / ITEMMAX)) -eq 0 ]] &&
+        runtpl atom footer >>"${TMPDIR}/${ATOMFILE}"
+}
+
+########### start processing #############
+
+# get all posts
+typeset -a posts
+/bin/ls -t ${BASEDIR}/posts/*.html |
+   while read post; do
+       posts[${#posts[@]}]="${post}"
+   done
+postslen=${#posts[@]}
+
+# get timestamp of very last post for rss
+TVARS[LASTUPDATED]="$(getRFCtime "${posts[0]}")"
+
+#### MAIN LOOP STARTS HERE ####
+
+counter=0
+# process posts
+for entry in "${posts[@]}"; do
+    [[ $((counter % ITEMMAX)) == 0 ]] && {
+        # write out headers
+        runtpl xhtml header >"${TMPDIR}/${HTMLFILE}"
+        # atom is only generated for the first ITEMMAX posts
+        [[ $((counter / ITEMMAX)) == 0 ]] &&
+            runtpl atom header >"${TMPDIR}/${ATOMFILE}"
+    }
+
+    fname="${entry##*/}"
+    TVARS[POSTTITLE]="${fname%.html}"
+    TVARS[POSTUPDATED]="$(getRFCtime "$entry")"
+    TVARS[POSTUPDATEDSHORT]="$(stat -c "%y" "$entry" | cut -d" " -f1 | tr - /)"
+    TVARS[POSTCONTENT]="$(filter "$entry")"
+    TVARS[POSTURL]="posts/${fname// /_}"
+    TVARS[PAGETITLE]="$BLOGNAME - ${TVARS[POSTTITLE]}"
+
+    # generate permalink end-point
+    TVARS[OLDERPOSTS]=""
+    [[ $counter -lt $(( postslen -1 )) ]] &&
+        TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"$BASEURL/posts/$(getpostfile "${posts[counter+1]}")\">older post</a></div>"
+    TVARS[NEWERPOSTS]=""
+    [[ $counter -gt 0 ]] &&
+        TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$BASEURL/posts/$(getpostfile "${posts[counter-1]}")\">newer posts</a></div>"
+    runtpl xhtml post >"${BASEDIR}/www/${TVARS[POSTURL]}"
+
+    # write item into archive and optionally into the feed
+    runtpl xhtml item >>"${TMPDIR}/${HTMLFILE}"
+    [[ $((counter / ITEMMAX)) -eq 0 ]] &&
+        runtpl atom item >>"${TMPDIR}/${ATOMFILE}"
+
+    # we have writen ITEMMAX posts, time to write some footers and
+    # starts some new files
+    [[ $((counter % ITEMMAX)) -eq $((ITEMMAX -1)) ]] && {
+        dofooter
+        HTMLFILE="page-$(( (counter / ITEMMAX ) + 1 )).html"
+    }
+    counter=$((counter + 1))
+done
+
+# last file might not be closed
+[[ $((counter % ITEMMAX)) -ne 0 ]] &&
+    dofooter
+
+# move to final dest
+mv "${TMPDIR}/"* ${BASEDIR}/www/
