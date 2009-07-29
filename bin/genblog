@@ -21,6 +21,7 @@ ITEMMAX=15
 TMPDIR="$BASEDIR/tmp" # must exist!
 ATOMFILE="atom.xml"
 HTMLFILE="index.html"
+SITEMAPFILE="sitemap.xml"
 BASEURL=${TVARS[BASEURL]}
 
 #### end of config ####
@@ -79,6 +80,16 @@ dofooter() {
     runtpl xhtml footer >>"${TMPDIR}/${HTMLFILE}"
     [[ $((counter / ITEMMAX)) -eq 0 ]] &&
         runtpl atom footer >>"${TMPDIR}/${ATOMFILE}"
+
+    # WRITE sitemap entry for current page
+    TVARS[POSTURL]="${HTMLFILE}"
+    TVARS[POSTUPDATEDSHORT]="$(date '+%Y-%m-%d')"
+    TVARS[CHANGEFREQ]="weekly"
+    [[ $((counter / ITEMMAX)) -eq 0 ]] &&
+        TVARS[PAGEPRIO]="0.9"
+    [[ $((counter / ITEMMAX)) -gt 0 ]] &&
+        TVARS[PAGEPRIO]="0.8"
+    runtpl sitemap item >>"${TMPDIR}/${SITEMAPFILE}"
 }
 
 ########### start processing #############
@@ -97,6 +108,9 @@ TVARS[LASTUPDATED]="$(getRFCtime "${posts[0]}")"
 #### MAIN LOOP STARTS HERE ####
 
 counter=0
+# start sitemap
+runtpl sitemap header >"${TMPDIR}/${SITEMAPFILE}"
+
 # process posts
 for entry in "${posts[@]}"; do
     [[ $((counter % ITEMMAX)) == 0 ]] && {
@@ -110,7 +124,7 @@ for entry in "${posts[@]}"; do
     fname="${entry##*/}"
     TVARS[POSTTITLE]="${fname%.html}"
     TVARS[POSTUPDATED]="$(getRFCtime "$entry")"
-    TVARS[POSTUPDATEDSHORT]="$(stat -c "%y" "$entry" | cut -d" " -f1 | tr - /)"
+    TVARS[POSTUPDATEDSHORT]="$(stat -c "%y" "$entry" | cut -d" " -f1)"
     TVARS[POSTCONTENT]="$(filter "$entry")"
     TVARS[POSTURL]="posts/${fname// /_}"
     TVARS[PAGETITLE]="$BLOGNAME - ${TVARS[POSTTITLE]}"
@@ -123,6 +137,10 @@ for entry in "${posts[@]}"; do
     [[ $counter -gt 0 ]] &&
         TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$BASEURL/posts/$(getpostfile "${posts[counter-1]}")\">newer posts</a></div>"
     runtpl xhtml post >"${BASEDIR}/www/${TVARS[POSTURL]}"
+    # WRITE sitemap entry for permalink
+    TVARS[CHANGEFREQ]="monthly"
+    TVARS[PAGEPRIO]="0.6"
+    runtpl sitemap item >>"${TMPDIR}/${SITEMAPFILE}"
 
     # write item into archive and optionally into the feed
     runtpl xhtml item >>"${TMPDIR}/${HTMLFILE}"
@@ -141,6 +159,9 @@ done
 # last file might not be closed
 [[ $((counter % ITEMMAX)) -ne 0 ]] &&
     dofooter
+
+runtpl sitemap footer >>"${TMPDIR}/${SITEMAPFILE}"
+gzip "${TMPDIR}/${SITEMAPFILE}"
 
 # move to final dest
 mv "${TMPDIR}/"* ${BASEDIR}/www/
