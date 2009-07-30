@@ -163,5 +163,9 @@ done
 runtpl sitemap footer >>"${TMPDIR}/${SITEMAPFILE}"
 gzip "${TMPDIR}/${SITEMAPFILE}"
 
+for file in ${BASEDIR}/layout/static/*; do
+    runtpl static "${file##*/}" >"${TMPDIR}/${file##*/}"
+done
+
 # move to final dest
 mv "${TMPDIR}/"* ${BASEDIR}/www/

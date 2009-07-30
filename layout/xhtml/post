@@ -18,9 +18,9 @@
 <div id="hover">
    <h1><a href="BASEURL/" title="Link to top level"><img src="BLOGLOGO" style="height: 69px; vertical-align: middle;" alt="logo" />BLOGTITLE</a></h1>
 <ul id="tnav">
- <li><a href="BASEURL/" title="About this site">Home</a></li>
- <li><a href="BASEURL/about" title="About this site">About</a></li>
- <li><a href="BASEURL/atom" title="Receive updates in your feed reader">Feed</a></li>
+ <li><a href="BASEURL/" title="About this site">home</a></li>
+ <li><a href="BASEURL/bookmarks.html" title="My Delicious Bookmarks">bookmarks</a></li>
+ <li><a href="BASEURL/atom.xml" title="Receive updates in your feed reader">feed</a></li>
  <li><form action="http://www.google.com/search" name="searchbox" method="get" style="margin-left: 2em;">
     <input type="hidden" name="ie" value="utf-8" />
     <input type="hidden" name="sitesearch" value="www.ctrlc.hu" />
@@ -30,7 +30,7 @@
          <img src="../images/srch.gif" alt="search" /></div>
       </a>
 </form></li>
-</ul><br style="clear: both;"></br>
+</ul>
 </div>
 <div class="hentry">
   <h2>
