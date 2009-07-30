@@ -9,7 +9,7 @@
   POSTCONTENT
   </div>
   <div>
-  <p><a href="POSTURL" title="Permalink" rel="bookmark" style="font-size: 50%; text-align: right;">permalink</a></p>
+  <p><a href="POSTURL#disqus_thread" title="Permalink" rel="bookmark" style="font-size: 50%; text-align: right;">comments</a></p>
   </div>
-  <hr style="background-color: #000; height: 2px; margin-bottom: 2em; margin-top: 2em;"/>
 </div>
+<hr style="background-color: #000; height: 1px; margin-bottom: 2em; margin-top: 2em;"/>

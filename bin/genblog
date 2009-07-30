@@ -4,7 +4,7 @@
 # filename is used as a title, the last modification time as
 # lastupdate.
 #
-# TODO tags, sitemap.xml 4 google, blog search
+# TODO tags, blog search
 
 # blog config
 typeset -A TVARS
@@ -37,7 +37,7 @@ runtpl() {
         defines[${#defines[@]}]="-D${key}=${TVARS[$key]}"
     done
 
-    # do template instanciation
+    # do template instantiation
     m4 "${defines[@]}" ${BASEDIR}/layout/$1/$2
     unset defines # clear those damn defines again
 }
@@ -69,12 +69,12 @@ dofooter() {
     [[ $((counter / ITEMMAX)) -gt 1 ]] &&
         NEXTPAGE="page-$(( (counter / ITEMMAX) -1 )).html"
     [[ -n "${NEXTPAGE}" ]] &&
-        TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$NEXTPAGE\">newer posts</a></div>"
+        TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$NEXTPAGE\">next posts</a></div>"
 
     # link to older archives
     TVARS[OLDERPOSTS]=""
     [[ counter -lt $postslen ]] &&
-        TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"page-$(( (counter / ITEMMAX) + 1)).html\">older posts</a></div>"
+        TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"page-$(( (counter / ITEMMAX) + 1)).html\">prev posts</a></div>"
 
     # write out footers
     runtpl xhtml footer >>"${TMPDIR}/${HTMLFILE}"
@@ -127,15 +127,15 @@ for entry in "${posts[@]}"; do
     TVARS[POSTUPDATEDSHORT]="$(stat -c "%y" "$entry" | cut -d" " -f1)"
     TVARS[POSTCONTENT]="$(filter "$entry")"
     TVARS[POSTURL]="posts/${fname// /_}"
-    TVARS[PAGETITLE]="$BLOGNAME - ${TVARS[POSTTITLE]}"
+    TVARS[PAGETITLE]="${TVARS[BLOGTITLE]} - ${TVARS[POSTTITLE]}"
 
     # generate permalink end-point
     TVARS[OLDERPOSTS]=""
     [[ $counter -lt $(( postslen -1 )) ]] &&
-        TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"$BASEURL/posts/$(getpostfile "${posts[counter+1]}")\">older post</a></div>"
+        TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"$BASEURL/posts/$(getpostfile "${posts[counter+1]}")\">prev post</a></div>"
     TVARS[NEWERPOSTS]=""
     [[ $counter -gt 0 ]] &&
-        TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$BASEURL/posts/$(getpostfile "${posts[counter-1]}")\">newer posts</a></div>"
+        TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$BASEURL/posts/$(getpostfile "${posts[counter-1]}")\">next posts</a></div>"
     runtpl xhtml post >"${BASEDIR}/www/${TVARS[POSTURL]}"
     # WRITE sitemap entry for permalink
     TVARS[CHANGEFREQ]="monthly"

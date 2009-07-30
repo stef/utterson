@@ -8,6 +8,7 @@
  <meta name="DC.title" content="BLOGTITLE" />
  <meta name="DC.subject" content="copyright culture development europe freedom freesoftware government history hungarian innovation internet" />
  <meta name="DC.creator" content="Stefan Marsiske" />
+ <meta name="verify-v1" content="Ft65g8nNmU207F7n4bRgVm+atANbg1+npoH5UNTpE+w=" />
  <link rel="Shortcut Icon" href="~stef/favicon.png" type="image/png" />
  <link rel="stylesheet" type="text/css" href="main.css" />
  <link rel="alternate" href="BASEURL/atom.xml" type="application/atom+xml" title="BLOGTITLE" charset="utf-8" />
@@ -21,13 +22,15 @@
  <li><a href="BASEURL/" title="About this site">Home</a></li>
  <li><a href="BASEURL/about" title="About this site">About</a></li>
  <li><a href="BASEURL/atom.xml" title="Receive updates in your feed reader">Feed</a></li>
- <li>
-   <form action="http://www.google.com/search" name="searchbox" method="get" style="margin-left: 2em;" />
-   <input type="hidden" name="hl" value="en" />
-   <input type="hidden" name="ie" value="utf-8" />
-   <input type="hidden" name="sitesearch" value="www.ctrlc.hu" />
-     <input maxlength="256" size="20" name="q" value="inurl:~stef/blog/" />
-     <input type="submit" value="find" name="btnG" style="font-size:75%;" />
+ <li><form action="http://www.google.com/search" name="searchbox" method="get" style="margin-left: 2em;">
+    <input type="hidden" name="ie" value="utf-8" />
+    <input type="hidden" name="sitesearch" value="www.ctrlc.hu" />
+    <div><input class="search" maxlength="256" size="20" name="q" />
+       <a href="javascript:document.searchbox.submit()" 
+          onclick="document.searchbox.q.value+=' inurl:~stef/blog/'; return true; ">
+         <img src="images/srch.gif" alt="search" /></div>
+      </a>
+</form></li>
    </form> 
  </li>
 </ul><br style="clear: both;"></br>
