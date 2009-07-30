@@ -61,6 +61,7 @@ getpostfile() {
 }
 
 dofooter() {
+    TVARS[POSTURL]="${HTMLFILE}"
     # calculates and provides navigation information (next/prev page)
     # link to newer archives
     TVARS[NEWERPOSTS]=""
@@ -82,7 +83,6 @@ dofooter() {
         runtpl atom footer >>"${TMPDIR}/${ATOMFILE}"
 
     # WRITE sitemap entry for current page
-    TVARS[POSTURL]="${HTMLFILE}"
     TVARS[POSTUPDATEDSHORT]="$(date '+%Y-%m-%d')"
     TVARS[CHANGEFREQ]="weekly"
     [[ $((counter / ITEMMAX)) -eq 0 ]] &&
@@ -164,6 +164,7 @@ runtpl sitemap footer >>"${TMPDIR}/${SITEMAPFILE}"
 gzip "${TMPDIR}/${SITEMAPFILE}"
 
 for file in ${BASEDIR}/layout/static/*; do
+    TVARS[POSTURL]="${file##*/}"
     runtpl static "${file##*/}" >"${TMPDIR}/${file##*/}"
 done
 
