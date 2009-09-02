@@ -5,7 +5,7 @@
       <id>BASEURL/POSTURL</id>
       <author><name>POSTAUTHOR</name></author>
 		<category term="POSTCATEGORY" scheme="http://www.sixapart.com/ns/types#category"/>
-		<content type="html" xml:lang="en" xml:base="http://www.ctrlc.hu/~stef/blog/"><![CDATA[
+		<content type="html" xml:lang="en" xml:base="BASEURL"><![CDATA[
       POSTCONTENT
 ]]></content>
 	</entry>
