@@ -1,0 +1,41 @@
+#!/usr/bin/ksh
+# generates an atomfeed and static html blog pages from
+# posts/*.html files, containing the entry content of the posts, the
+# filename is used as a title, the last modification time as
+# lastupdate.
+#
+# TODO tags, blog search
+
+. ${0%%/*}/utterson.cfg
+. ${0%%/*}/utterson.lib
+
+########### start processing #############
+
+postslen=${#@}
+
+# get timestamp of very last post for rss
+TVARS[LASTUPDATED]="$(getRFCtime "${1}")"
+
+#### MAIN LOOP STARTS HERE ####
+
+counter=0
+# process posts
+for entry; do
+    fname="${entry##*/}"
+    TVARS[POSTTITLE]="${fname%.html}"
+    TVARS[POSTUPDATED]="$(getRFCtime "$entry")"
+    TVARS[POSTUPDATEDSHORT]="$(stat -c "%y" "$entry" | cut -d" " -f1)"
+    TVARS[POSTCONTENT]="$(filter "$entry")"
+    TVARS[POSTURL]="posts/${fname// /_}"
+    TVARS[PAGETITLE]="${TVARS[BLOGTITLE]} - ${TVARS[POSTTITLE]}"
+
+    # generate permalink end-point
+    TVARS[OLDERPOSTS]=""
+    [[ $counter -lt $(( postslen -1 )) ]] &&
+        TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"$BASEURL/posts/$(getpostfile "$(eval 'echo ${'$((counter + 2 ))'}')")\">prev post</a></div>"
+    TVARS[NEWERPOSTS]=""
+    [[ $counter -gt 0 ]] &&
+        TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$BASEURL/posts/$(getpostfile "$(eval 'echo ${'${counter}'}')")\">next posts</a></div>"
+    runtpl xhtml post >"${TMPDIR}/${fname// /_}"
+    counter=$((counter + 1))
+done
