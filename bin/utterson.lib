@@ -35,20 +35,13 @@ getpostfile() {
     echo "${fname// /_}"
 }
 
-getprevnext() {
-    TVARS[POSTURL]="${HTMLFILE}"
-    # calculates and provides navigation information (next/prev page)
-    # link to newer archives
-    TVARS[NEWERPOSTS]=""
-    [[ $((counter / ITEMMAX)) -eq 1 ]] &&
-        NEXTPAGE="index.html"
-    [[ $((counter / ITEMMAX)) -gt 1 ]] &&
-        NEXTPAGE="page-$(( (counter / ITEMMAX) -1 )).html"
-    [[ -n "${NEXTPAGE}" ]] &&
-        TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$NEXTPAGE\">next posts</a></div>"
-
-    # link to older archives
-    TVARS[OLDERPOSTS]=""
-    [[ counter -lt $postslen ]] &&
-        TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"page-$(( (counter / ITEMMAX) + 1)).html\">prev posts</a></div>"
+tvarinit() {
+    fname="${entry##*/}"
+    tmp="${fname%.html}"
+    TVARS[POSTTITLE]="${tmp//_/ }"
+    TVARS[POSTUPDATED]="$(getRFCtime "$entry")"
+    TVARS[POSTUPDATEDSHORT]="$(stat -c "%y" "$entry" | cut -d" " -f1)"
+    TVARS[POSTCONTENT]="$(filter "$entry")"
+    TVARS[POSTURL]="posts/${fname// /_}"
+    TVARS[PAGETITLE]="${TVARS[BLOGTITLE]} - ${TVARS[POSTTITLE]}"
 }

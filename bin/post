@@ -11,31 +11,14 @@
 
 ########### start processing #############
 
-postslen=${#@}
+entry=$1
+tvarinit
 
-# get timestamp of very last post for rss
-TVARS[LASTUPDATED]="$(getRFCtime "${1}")"
-
-#### MAIN LOOP STARTS HERE ####
-
-counter=0
-# process posts
-for entry; do
-    fname="${entry##*/}"
-    TVARS[POSTTITLE]="${fname%.html}"
-    TVARS[POSTUPDATED]="$(getRFCtime "$entry")"
-    TVARS[POSTUPDATEDSHORT]="$(stat -c "%y" "$entry" | cut -d" " -f1)"
-    TVARS[POSTCONTENT]="$(filter "$entry")"
-    TVARS[POSTURL]="posts/${fname// /_}"
-    TVARS[PAGETITLE]="${TVARS[BLOGTITLE]} - ${TVARS[POSTTITLE]}"
-
-    # generate permalink end-point
-    TVARS[OLDERPOSTS]=""
-    [[ $counter -lt $(( postslen -1 )) ]] &&
-        TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"$BASEURL/posts/$(getpostfile "$(eval 'echo ${'$((counter + 2 ))'}')")\">prev post</a></div>"
-    TVARS[NEWERPOSTS]=""
-    [[ $counter -gt 0 ]] &&
-        TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$BASEURL/posts/$(getpostfile "$(eval 'echo ${'${counter}'}')")\">next posts</a></div>"
-    runtpl xhtml post >"${TMPDIR}/${fname// /_}"
-    counter=$((counter + 1))
-done
+# calculate permalink end-point
+TVARS[NEWERPOSTS]=""
+TVARS[OLDERPOSTS]=""
+[[ -n $2 ]] &&
+    TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$BASEURL/posts/$2\">next posts</a></div>"
+[[ -n $3 ]] &&
+    TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"$BASEURL/posts/$3\">prev post</a></div>"
+runtpl xhtml post

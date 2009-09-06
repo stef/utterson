@@ -10,10 +10,13 @@
 . ${0%%/*}/utterson.lib
 
 ########### start processing #############
-
-postslen=${#@}
-HTMLFILE=index.html
 #### MAIN LOOP STARTS HERE ####
+
+[[ $# -lt 4 ]] && { echo "$0 <curpage> <prevpage> <nextpage> <posts...>"; exit 1; }
+HTMLFILE="$1"
+NEXTPAGE="$2"
+PREVPAGE="$3"
+shift 3
 
 # write out headers
 runtpl xhtml header
@@ -21,13 +24,20 @@ runtpl xhtml header
 # process posts
 for entry; do
     tvarinit
-    # write item into archive and optionally into the feed
+    # write item into archive
     runtpl xhtml item
 done
 
+TVARS[POSTURL]="${HTMLFILE}"
+# calculates and provides navigation information (next/prev page)
+# link to newer archives
+[[ -n "${NEXTPAGE}" ]] &&
+    TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$NEXTPAGE\">next posts</a></div>"
+
 # link to older archives
-TVARS[NEWERPOSTS]=""
-TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"page-1.html\">prev posts</a></div>"
+[[ -n "${PREVPAGE}" ]] &&
+    TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"$PREVPAGE\">prev posts</a></div>"
+
 runtpl xhtml footer
 
 return 0

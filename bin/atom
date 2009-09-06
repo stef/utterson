@@ -18,33 +18,11 @@ TVARS[LASTUPDATED]="$(getRFCtime "${1}")"
 
 #### MAIN LOOP STARTS HERE ####
 
-counter=0
+runtpl atom header
 # process posts
 for entry; do
-    [[ $((counter % ITEMMAX)) == 0 ]] && {
-        # write out headers
-        # atom is only generated for the first ITEMMAX posts
-        [[ $((counter / ITEMMAX)) == 0 ]] &&
-            runtpl atom header >"${TMPDIR}/${ATOMFILE}"
-    }
-
-    fname="${entry##*/}"
-    TVARS[POSTTITLE]="${fname%.html}"
-    TVARS[POSTUPDATED]="$(getRFCtime "$entry")"
-    TVARS[POSTUPDATEDSHORT]="$(stat -c "%y" "$entry" | cut -d" " -f1)"
-    TVARS[POSTCONTENT]="$(filter "$entry")"
-    TVARS[POSTURL]="posts/${fname// /_}"
-    TVARS[PAGETITLE]="${TVARS[BLOGTITLE]} - ${TVARS[POSTTITLE]}"
-
-    [[ $((counter / ITEMMAX)) -eq 0 ]] &&
-        runtpl atom item >>"${TMPDIR}/${ATOMFILE}"
-
-    # we have writen ITEMMAX posts, time to write some footers and
-    # starts some new files
-    [[ $((counter % ITEMMAX)) -eq $((ITEMMAX -1)) ]] && {
-        dofooter
-        runtpl atom footer >>"${TMPDIR}/${ATOMFILE}"
-        break
-    }
-    counter=$((counter + 1))
+    tvarinit
+    runtpl atom item
 done
+
+runtpl atom footer

@@ -13,41 +13,41 @@
 
 postslen=${#@}
 
-# get timestamp of very last post for rss
-TVARS[LASTUPDATED]="$(getRFCtime "${1}")"
-
 #### MAIN LOOP STARTS HERE ####
 
 counter=0
 # start sitemap
-runtpl sitemap header >"${TMPDIR}/${SITEMAPFILE}"
+runtpl sitemap header
 
 # process posts
 for entry; do
-    fname="${entry##*/}"
-    TVARS[POSTTITLE]="${fname%.html}"
-    TVARS[POSTUPDATED]="$(getRFCtime "$entry")"
-    TVARS[POSTUPDATEDSHORT]="$(stat -c "%y" "$entry" | cut -d" " -f1)"
-    TVARS[POSTCONTENT]="$(filter "$entry")"
-    TVARS[POSTURL]="posts/${fname// /_}"
-    TVARS[PAGETITLE]="${TVARS[BLOGTITLE]} - ${TVARS[POSTTITLE]}"
-
+    tvarinit
     # WRITE sitemap entry for permalink
     TVARS[CHANGEFREQ]="monthly"
     TVARS[PAGEPRIO]="0.6"
-    runtpl sitemap item >>"${TMPDIR}/${SITEMAPFILE}"
+    runtpl sitemap item
 
     counter=$((counter + 1))
 done
 
 # WRITE sitemap entry for index pages
-TVARS[POSTUPDATEDSHORT]="$(date '+%Y-%m-%d')"
+pagecnt=$(($postslen / $ITEMMAX ))
+i=0
 TVARS[CHANGEFREQ]="weekly"
-[[ $((counter / ITEMMAX)) -eq 0 ]] &&
-    TVARS[PAGEPRIO]="0.9"
-[[ $((counter / ITEMMAX)) -gt 0 ]] &&
-    TVARS[PAGEPRIO]="0.8"
-runtpl sitemap item >>"${TMPDIR}/${SITEMAPFILE}"
+while [ $i -lt ${pagecnt} ]; do
+    if [[ $i -gt 0 ]]; then
+        TVARS[PAGEPRIO]="0.8"
+        entry="${TMPDIR}/page-$i.html"
+    else
+        TVARS[PAGEPRIO]="0.9"
+        entry="${TMPDIR}/index.html"
+    fi
+    fname="${entry##*/}"
+    tmp="${fname%.html}"
+    TVARS[POSTUPDATED]="$(getRFCtime "$entry")"
+    TVARS[POSTURL]="posts/${fname// /_}"
+    runtpl sitemap item
+    i=$((i+1))
+done
 
-runtpl sitemap footer >>"${TMPDIR}/${SITEMAPFILE}"
-gzip "${TMPDIR}/${SITEMAPFILE}"
+runtpl sitemap footer
