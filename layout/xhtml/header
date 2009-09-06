@@ -22,17 +22,16 @@
  <li><a href="BASEURL/" title="About this site">home</a></li>
  <li><a href="BASEURL/bookmarks.html" title="My Delicious Bookmarks">bookmarks</a></li>
  <li><a href="BASEURL/atom.xml" title="Receive updates in your feed reader">feed</a></li>
- <li><form action="http://www.google.com/search" name="searchbox" method="get" style="margin-left: 2em;">
-    <input type="hidden" name="ie" value="utf-8" />
-    <input type="hidden" name="sitesearch" value="www.ctrlc.hu" />
-    <div><input class="search" maxlength="256" size="20" name="q" />
+ <li><form action="http://www.google.com/search" method="get" style="margin-left: 2em;">
+    <div>
+       <input type="hidden" name="sitesearch" value="www.ctrlc.hu" />
+       <input class="search" maxlength="256" size="20" name="q" />
        <a href="javascript:document.searchbox.submit()" 
           onclick="document.searchbox.q.value+=' inurl:~stef/blog/'; return true; ">
-         <img src="images/srch.gif" alt="search" /></div>
-      </a>
-</form></li>
-   </form> 
- </li>
+          <img src="images/srch.gif" alt="search" />
+       </a>
+   </div>
+ </form></li>
 </ul>
 </div>
 <div class="hfeed">

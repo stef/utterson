@@ -1,15 +1,7 @@
 #!/usr/bin/ksh
-# generates an atomfeed and static html blog pages from
-# posts/*.html files, containing the entry content of the posts, the
-# filename is used as a title, the last modification time as
-# lastupdate.
-#
-# TODO tags, blog search
 
 . ${0%%/*}/utterson.cfg
 . ${0%%/*}/utterson.lib
-
-########### start processing #############
 
 entry=$1
 tvarinit
@@ -18,7 +10,7 @@ tvarinit
 TVARS[NEWERPOSTS]=""
 TVARS[OLDERPOSTS]=""
 [[ -n $2 ]] &&
-    TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$BASEURL/posts/$2\">next posts</a></div>"
+    TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$BASEURL/$2\">next posts</a></div>"
 [[ -n $3 ]] &&
-    TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"$BASEURL/posts/$3\">prev post</a></div>"
+    TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"$BASEURL/$3\">prev post</a></div>"
 runtpl xhtml post
