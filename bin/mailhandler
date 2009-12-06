@@ -1,0 +1,37 @@
+#!/usr/bin/env ksh
+
+. ${0%%/*}/utterson.cfg
+
+fname="$(echo "$1" | sed -e 's/^ *//' -e 's/ *$//' -e 's/ /_/g')"
+print $fname
+
+# we need the filename/title of the post
+[[ $# -ne 1 ]] && { 
+   echo "please specify posts filename"
+   exit 1
+}
+# do not clobber existing posts
+[[ -f posts/$fname.html ]] && {
+   # reply with confirmation email
+   (formail -r <$TMP ; printf "*ERROR* Duplicate post received.\n") | sendmail -t
+   exit 1
+}
+
+# store the message for multiple filters
+TMP=`mktemp -t mailhandler.XXXXXX`
+trap "rm $TMP* 2>/dev/null" EXIT
+cat - >$TMP
+
+# remove headers and crypt+mail signatures from the body
+sed -e '1,/^$/ d' $TMP |
+sed -e "/SIGNED MESSAGE/,/^$/d" -e "/BEGIN PGP/,/END PGP/d" |
+sed -e '/^-- /,$ d' >posts/$fname.html
+
+# include new post in makefile
+ksh bin/makemake
+
+# make single post file, do not touch anything else.
+make tmp/posts/$fname.html
+
+# reply with confirmation email
+(formail -r <$TMP ; printf "New post accepted.\nit's available under: ${TVARS['BASEURL']}/drafts/$fname.html\noriginal post follows\n\n" ; cat posts/$fname.html) | sendmail -t
