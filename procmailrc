@@ -1,0 +1,6 @@
+:0 Wcb: .lock.gpgverify
+| /usr/bin/gpg --batch --verify 2> /dev/null
+
+title=`formail -xSubject: `
+:0 ab: .lock.gpgweblog
+| sed -e "/SIGNED MESSAGE/,/^$/d" -e "/BEGIN PGP/,/END PGP/d" | sed -e '/^-- /,$ d' >"$(echo $title | sed -e 's/^ *//' -e 's/ *$//')"
