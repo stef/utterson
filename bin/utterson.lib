@@ -42,6 +42,6 @@ tvarinit() {
     TVARS[POSTUPDATED]="$(getRFCtime "$entry")"
     TVARS[POSTUPDATEDSHORT]="$(stat -c "%y" "$entry" | cut -d" " -f1)"
     TVARS[POSTCONTENT]="$(filter "$entry")"
-    TVARS[POSTURL]="posts/${fname// /_}"
+    TVARS[POSTURL]="${fname// /_}"
     TVARS[PAGETITLE]="${TVARS[BLOGTITLE]} - ${TVARS[POSTTITLE]}"
 }

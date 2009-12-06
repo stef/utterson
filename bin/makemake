@@ -1,2 +1,3 @@
 #!/usr/bin/ksh
+rm Makefile
 make -f Makefile.in Makefile

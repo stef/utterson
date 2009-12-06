@@ -17,6 +17,7 @@ xmlstarlet sel -T -N wp=http://wordpress.org/export/1.0/ <"$1" \
          $1="";
          sub(" ","");
          gsub(/[\"]/, "")
+         gsub(/ /, "_")
          FILENAME="posts/"$0".html"
       }
       /\$\#\@POSTPUBLISHED/ {
