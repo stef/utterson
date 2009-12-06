@@ -7,11 +7,12 @@ maxposts=15
 TMPDIR=tmp
 SHELL:=/usr/bin/zsh
 allposts:=$(shell ls -t posts/*.html )
+alldrafts:=$(shell ls -t drafts/*.html )
 newestposts:=$(shell ls -t posts/*.html | head -$(maxposts) )
 
 # move all files afterwards to www
 
-all: posts archive atom sitemap static
+all: Makefile posts drafts archive atom sitemap static
 
 index: $(TMPDIR)/index.html
 atom: $(TMPDIR)/atom.xml
@@ -26,10 +27,10 @@ $(TMPDIR)/atom.xml: $(newestposts)
 static: layout/static/*
 	ksh bin/static $^
 
-Makefile: Makefile.in $(allposts) drafts/*.html
+Makefile: Makefile.in $(allposts) $(alldrafts)
 	cp Makefile.in Makefile
 #	create page rules
-	set -A allposts $^; \
+	set -A allposts $(allposts); \
 	pagecnt=$$(($${#allposts[@]} / $(maxposts) )); \
 	i=1; \
 	while [ $$i -lt $${pagecnt} ]; do \
@@ -62,7 +63,7 @@ Makefile: Makefile.in $(allposts) drafts/*.html
 	echo >>$@
 	#	create posts rules
 	i=1; \
-	set -A files $^; \
+	set -A files $(allposts); \
 	while [ $${#files[@]} -ge $$i ]; do \
 		echo "\$$(TMPDIR)/$${files[i]}: $${files[i]}" >>$@; \
       echo "	@test -d \$$(@D) || mkdir -p \$$(@D)" >>$@; \
@@ -71,12 +72,14 @@ Makefile: Makefile.in $(allposts) drafts/*.html
 		i=$$((i+1)); \
 	done; \
 	echo "posts: $$postpages" >>$@; \
-	for draft in drafts/*.html ; do \
+	for draft in $(alldrafts) ; do \
 		echo >>$@; \
 		echo "\$$(TMPDIR)/$${draft}: $${draft}" >>$@; \
       echo "	@test -d \$$(@D) || mkdir -p \$$(@D)" >>$@; \
 		echo "	ksh bin/post \"$${draft}\" \"\" \"\" >\$$@\n\n" >>"$@"; \
-	done
+		alldrafts="$$alldrafts \$$(TMPDIR)/$${draft}"; \
+	done; \
+	echo "drafts: $$alldrafts" >>$@
 
 clean:
 	rm $(TMPDIR)/*.(html|xml|gz|css)

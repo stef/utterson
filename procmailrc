@@ -2,6 +2,5 @@
 | /usr/bin/gpg --batch --verify 2> /dev/null
 
 title=`formail -xSubject: `
-fname=`formail -xSubject: | sed -e 's/^ *//' -e 's/ *$//' -e 's/ /_/g'`
 :0 ahb: .lock.gpgweblog
-| ksh bin/mailhandler "$fname"
+| ksh bin/mailhandler "$title"
