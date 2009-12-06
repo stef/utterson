@@ -26,7 +26,7 @@ $(TMPDIR)/atom.xml: $(newestposts)
 static: layout/static/*
 	ksh bin/static $^
 
-Makefile: $(allposts)
+Makefile: Makefile.in $(allposts) drafts/*.html
 	cp Makefile.in Makefile
 #	create page rules
 	set -A allposts $^; \
@@ -55,12 +55,12 @@ Makefile: $(allposts)
 	done; \
 	echo "pages: $$pages" >>$@; \
 	echo >>$@; \
-	echo "archive: \$$(TMPDIR)/index.html $$pages" >>$@; \
+	echo "archive: \$$(TMPDIR)/index.html pages" >>$@; \
 	echo >>$@; \
 	echo "\$$(TMPDIR)/sitemap.xml.gz: "'$$'"(allposts) \$$(TMPDIR)/index.html $$pages" >>$@; \
 	echo "	ksh bin/sitemap "'$$'"(allposts) | gzip -c >tmp/sitemap.xml.gz" >>$@; \
-echo >>$@
-#	create posts rules
+	echo >>$@
+	#	create posts rules
 	i=1; \
 	set -A files $^; \
 	while [ $${#files[@]} -ge $$i ]; do \
@@ -70,10 +70,17 @@ echo >>$@
 		postpages="$$postpages \$$(TMPDIR)/$${files[i]}"; \
 		i=$$((i+1)); \
 	done; \
-	echo "posts: $$postpages" >>$@
+	echo "posts: $$postpages" >>$@; \
+	for draft in drafts/*.html ; do \
+		echo >>$@; \
+		echo "\$$(TMPDIR)/$${draft}: $${draft}" >>$@; \
+      echo "	@test -d \$$(@D) || mkdir -p \$$(@D)" >>$@; \
+		echo "	ksh bin/post \"$${draft}\" \"\" \"\" >\$$@\n\n" >>"$@"; \
+	done
 
 clean:
 	rm $(TMPDIR)/*.(html|xml|gz|css)
 	rm -rf $(TMPDIR)/posts
+	rm -rf $(TMPDIR)/drafts
 
 .PHONY: index posts static
