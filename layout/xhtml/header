@@ -9,6 +9,7 @@
  <meta name="DC.subject" content="copyright culture development europe freedom freesoftware government history hungarian innovation internet" />
  <meta name="DC.creator" content="Stefan Marsiske" />
  <meta name="verify-v1" content="Ft65g8nNmU207F7n4bRgVm+atANbg1+npoH5UNTpE+w=" />
+ <meta name="google-site-verification" content="_A7ISsSaGzpFiyaiXULHgszM-9puI31FLrpoNDSVCN4" />
  <link rel="Shortcut Icon" href="~stef/favicon.png" type="image/png" />
  <link rel="stylesheet" type="text/css" href="main.css" />
  <link rel="alternate" href="BASEURL/atom.xml" type="application/atom+xml" title="BLOGTITLE" charset="utf-8" />
@@ -22,6 +23,8 @@
  <li><a href="BASEURL/" title="About this site">home</a></li>
  <li><a href="BASEURL/bookmarks.html" title="My Delicious Bookmarks">bookmarks</a></li>
  <li><a href="BASEURL/atom.xml" title="Receive updates in your feed reader">feed</a></li>
+ <li><a href="http://github.com/stef" title="Browse some code">code</a></li>
+ <li><a href="http://www.tvhelyett.hu/" title="Watch some flicks">videos</a></li>
  <li><form action="http://www.google.com/search" method="get" style="margin-left: 2em;">
     <div>
        <input type="hidden" name="sitesearch" value="www.ctrlc.hu" />
@@ -35,3 +38,33 @@
 </ul>
 </div>
 <div class="hfeed">
+<div class="outright">
+<div style="overflow:hidden; width: 100%"><a href="http://hspbp.org"><img src="http://hspbp.org/tiki-download_file.php?fileId=362&#038;display" class="alignnone" width="150" height="220" /></a></div>
+<h3><a href='http://del.icio.us/fdsa4321'>/dev/read</a></h3><div id="delicious-box" style="margin:0;padding:0;border:none;"> </div>
+         <script type="text/javascript" src="http://feeds.delicious.com/v1/json/fdsa4321?count=10"></script>
+         <script type="text/javascript">
+         function showImage(img){ return (function(){ img.style.display='inline'; }) }
+         var ul = document.createElement('ul');
+         for (var i=0, post; post = Delicious.posts[i]; i++) {
+            var li = document.createElement('li');
+            var a = document.createElement('a');
+            a.setAttribute('href', post.u);
+            a.appendChild(document.createTextNode(post.d));
+            li.appendChild(a);
+            ul.appendChild(li);
+         }
+         ul.setAttribute('id', 'delicious-list');
+         document.getElementById('delicious-box').appendChild(ul);
+         </script>
+      <div id="vodpod_recent_videos">Watch <a href="http://vodpod.com">videos</a> at Vodpod and other <a href="http://tvhelyetthu.vodpod.com">videos</a> from this collection.</div><script src="http://widgets.vodpod.com/javascripts/recent_videos.js?id=tvhelyetthu&options[theme]=sidebar4_white&tag_id=latest&title=tvhelyett.hu&"></script><h3>Blogroll</h3>
+
+   <ul>
+<li><a href="http://hspbp.org/">budapesti hackerspace</a></li>
+<li><a href="http://omnipotent.net/jquery.sparkline/">jQuery Sparkline</a></li>
+<li><a href="http://kormanybeszerzo.hu/">kormánybeszerző.hu</a></li>
+<li><a href="http://nyilt.org">nyilt.org</a></li>
+<li><a href="http://www.tvhelyett.hu/">tvhelyett.hu</a></li>
+<li><a href="http://visszaajovo.be/">Vissza a jövőbe</a></li>
+
+   </ul>
+</div>
