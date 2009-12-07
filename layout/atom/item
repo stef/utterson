@@ -1,8 +1,8 @@
 	<entry>
 		<title>POSTTITLE</title>
-		<link rel="alternate" type="text/html" href="POSTURL"/>
+		<link rel="alternate" type="text/html" href="posts/POSTURL"/>
 		<updated>POSTUPDATED</updated>
-      <id>BASEURL/POSTURL</id>
+      <id>BASEURL/posts/POSTURL</id>
       <author><name>POSTAUTHOR</name></author>
 		<category term="POSTCATEGORY" scheme="http://www.sixapart.com/ns/types#category"/>
 		<content type="html" xml:lang="en" xml:base="BASEURL"><![CDATA[
