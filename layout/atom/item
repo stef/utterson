@@ -1,6 +1,6 @@
 	<entry>
 		<title>POSTTITLE</title>
-		<link rel="alternate" type="text/html" href="posts/POSTURL"/>
+		<link rel="alternate" type="text/html" href="BASEURL/posts/POSTURL"/>
 		<updated>POSTUPDATED</updated>
       <id>BASEURL/posts/POSTURL</id>
       <author><name>POSTAUTHOR</name></author>
