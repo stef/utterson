@@ -35,7 +35,7 @@ for entry; do
     runtpl xhtml item
 done
 
-TVARS[POSTURL]="${HTMLFILE}"
+TVARS[POSTURL]="${BASEURL}/${HTMLFILE}"
 # calculates and provides navigation information (next/prev page)
 # link to newer archives
 [[ -n "${NEXTPAGE}" ]] &&

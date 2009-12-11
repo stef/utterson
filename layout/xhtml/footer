@@ -4,8 +4,8 @@ NEWERPOSTS OLDERPOSTS
 <hr />
 <div style="text-align: center">
     <a class="inline-button grey" href="http://creativecommons.org/licenses/by-sa/3.0/"><em>CC</em><span> BY-SA</span></a>
-    <a class="inline-button orange" href="http://feedvalidator.org/check.cgi?url=BASEURL/atom.xml"><em>RSS</em><span> Export</span></a>
-    <a class="inline-button blue" href="http://validator.w3.org/check?uri=BASEURL/POSTURL"><em>W3C</em><span>XHTML&nbsp;1.0</span></a>
+    <a class="inline-button orange" href="BASEURL/atom.xml"><em>RSS</em><span> Export</span></a>
+    <!--<a class="inline-button blue" href="http://validator.w3.org/check?uri=POSTURL"><em>W3C</em><span>XHTML&nbsp;1.0</span></a>-->
     <a class="inline-button green" href="http://jigsaw.w3.org/css-validator/"><em>CSS</em><span> 3.0</span></a>
 </div>
 <!-- Piwik -->

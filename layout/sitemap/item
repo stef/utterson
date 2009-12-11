@@ -1,5 +1,5 @@
    <url>
-      <loc>BASEURL/POSTURL</loc>
+      <loc>POSTURL</loc>
       <lastmod>POSTUPDATEDSHORT</lastmod>
       <changefreq>CHANGEFREQ</changefreq>
       <priority>PAGEPRIO</priority>
