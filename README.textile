@@ -1,18 +1,33 @@
 h1. Utterson
 
-is a bunch of scripts used for powering my blog, you could also call it a blog engine. Utterson currently supports creating paged listings of posts, separate pages for posts, an atom feed and sitemap support.
+is a bunch of scripts used for powering my blog, you could also call it a blog engine or blog compiler. Utterson currently supports creating paged listings of posts, separate pages for posts, an atom feed and sitemap support.
 
 The goals were
 * to make it as *simple* as possible: A blogauthor simply creates the raw html post content with his prefered editor (authors recommendation: emacs' muse mode.),
-* while using *only basic unix tools* (there are similar tools like blosxom, written in various scripting languages) With Utterson the html are assembled using the m4 macro processor, which is driven by a bunch of shell scripts, which in turn are controlled by a self-generating Makefile.
-* and *minimizing security risks* by creating only static files
+* use *only basic unix tools* (there are similar tools like blosxom, written in various scripting languages). With Utterson the html files are assembled using the m4 macro processor, which is driven by a bunch of shell scripts, which in turn are controlled by a self-generating Makefile.
+* *minimizing security risks* by creating only static files
 * *avoid server-side processing*.
 
-h2. Skeleton of an Utterson blog
+h2. the easiest way to start
+
+@git clone git://github.com/stef/utterson.git@
+@cd utterson@
+@mkdir tmp@
+@mkdir posts@
+@mkdir layout/static@
+@cp cfg/utterson.cfg.example cfg/utterson.cfg@
+@echo "&lt;p>Hello World&lt;/p>" >posts/first_post.html@
+@make -f Makefile.in Makefile@
+@make posts archive atom sitemap@
+@ls tmp@
+
+open up some of the files in tmp with a webbrowser.
+
+h2. Details
 
 * _Makefile.in_ - the all knowing makefile template.
-* _posts_/ - the directory where you store all your raw posts in html format
-* _tmp_/ - the directory where the results will be stored
+* _posts_/ - the directory where you store all your raw posts in html format (must be created on setup!)
+* _tmp_/ - the directory where the results will be stored (must be created on setup!)
 * _bin_/ - the directory where the helper scripts are stored
 * _cfg_/ - the configuration directory
 * _layout_/ - templates for the xhtml, sitemap and atom targets
@@ -28,10 +43,10 @@ All input goes in _posts_/ , this means you create here html files containing on
 
 When you have a proper makefile and you invoke the _all_ target, all output will be generated to _tmp_/. Since we're using make only those files will be regenerated that changed. E.g. when adding a new _post_, the _atom_, _sitemap_, _index_ and the _archive_ pages will be regenarated to reflect this change. A new file will be generated under _tmp/posts_ containing the permalink endpoint of the post. The _all_ target takes care of the complete blog, so afterwards it should be safe to invoke the _install_ target as well.
 
-The templates for the generated results can be found in _layout_/. Under _layout_/ you can find the templates for the _headers_, _footers_, _single page rendering_ and _list rendering_ of posts for _xhtml_, _sitemap_ and _atom_ targets. Anything contained in the _layout/static_ directory will be directly copied to the results, this way you can distribute your css and image files for example.
+The templates for the generated results can be found in _layout_/. Under _layout_/ you can find the templates for the _headers_, _footers_, _single page rendering_ and _list rendering_ of posts for _xhtml_, _sitemap_ and _atom_ targets. Anything contained in the _layout/static_ directory will be directly copied to the results, this way you can distribute your css and image files for example. Static is automatically a dependency of all, remove this in the Makefile.in, if you do not have static files to distribute.
 
 The configuration of the blog can be found in _cfg/utterson.cfg_. The scripts search the current directory, ~/.config/utterson, /etc/utterson and the ../cfg directory relative to the location of the utterson shell scripts. Use this to adapt to your needs. For longer html snippets it's easier to put them into separate files under _cfg_/, and then set them in _utterson.cfg_ like this
- TVARS[TRACKERCODE]="$(cat ${CFGDIR}/tracker.html)"
+ @TVARS[TRACKERCODE]="$(cat ${CFGDIR}/tracker.html)"@
 
 The helper scripts doing the main work are in the _bin_/ directory.
 * _atom_: outputs an atomfeed for all posts given as parameters.
@@ -44,15 +59,5 @@ The helper scripts doing the main work are in the _bin_/ directory.
 * _utterson.lib_: the core of utterson, this handles the templating, configuration and various helper functions.
 * _wpmigrate_: experimental script to convert wordpress exports to utterson-style single post files. Attention: wp does not really contain xhtml, the results will be ugly.
 * _wptouch_: experimental script for updating the timestamps of posts according to a wp export xml file. This is handy, if you manually clean up the posts after a wpmigrate invocation.
-
-h2. the easiest way to start
-
-@git clone git://github.com/stef/utterson.git
-cd utterson
-mkdir tmp
-mkdir posts
-echo "<p>Hello World</p>" >posts/first_post.html
-make -f Makefile.in
-make all@
 
 

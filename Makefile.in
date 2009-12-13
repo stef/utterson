@@ -30,6 +30,7 @@ newestposts:=$(shell ls -t posts/*.html | head -$(maxposts) )
 
 # move all files afterwards to www
 
+# if you don't have static content, remove it as a target
 all: posts archive atom sitemap static
 
 index: $(TMPDIR)/index.html
