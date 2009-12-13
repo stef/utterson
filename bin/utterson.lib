@@ -1,5 +1,19 @@
 #!/usr/bin/ksh
 
+if [[ -r "./cfg/utterson.cfg" ]]; then
+   CFGDIR="./cfg"
+elif [[ -r "~/.config/utterson/utterson.cfg" ]]; then
+   CFGDIR="~/.config/utterson"
+elif [[ -r "/etc/utterson/utterson.cfg" ]]; then
+   CFGDIR="~/etc/utterson"
+elif [[ -r "${0%%/*}/../cfg/utterson.cfg" ]]; then
+   CFGDIR="${0%%/*}/../cfg"
+else
+   echo "ERROR: no configuration found"
+   exit 1
+fi
+
+. ${CFGDIR}/utterson.cfg
 TVARS[GENBLOGVERSION]="utterson v0.2"
 
 runtpl() {
@@ -74,3 +88,5 @@ tvarinit() {
     TVARS[POSTURL]="${BASEURL}/posts/${fname// /_}"
     TVARS[PAGETITLE]="${TVARS[BLOGTITLE]} - ${TVARS[POSTTITLE]}"
 }
+
+# vim: set filetype=sh:

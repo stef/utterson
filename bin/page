@@ -16,7 +16,6 @@
 #
 # (C) 2009 by Stefan Marsiske, <stefan.marsiske@gmail.com>
 
-. ${0%%/*}/../cfg/utterson.cfg
 . ${0%%/*}/utterson.lib
 
 [[ $# -lt 4 ]] && { echo "$0 <curpage> <prevpage> <nextpage> <posts...>"; exit 1; }
