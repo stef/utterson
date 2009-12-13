@@ -1,0 +1,38 @@
+# blog config
+typeset -A TVARS
+# the base url of the blog
+TVARS[BASEURL]="http://www.example.com/~user1/blog"
+# TITLE of the blog
+TVARS[BLOGTITLE]="~user1/blog/"
+# url to the logo
+TVARS[BLOGLOGO]="/~user1/logo.png"
+# url to the favicon (png)
+TVARS[FAVICON]="/~user1/favicon.png"
+# META INFORMATION
+TVARS[BLOGDESC]="short blog description."
+TVARS[SUBJECT]="some tags"
+TVARS[AUTHOR]="John Doe"
+TVARS[OTHERMETA]="<meta name=\"google-site-verification\" content=\"copy your code here\" />"
+# author of posts
+TVARS[POSTAUTHOR]="john"
+TVARS[MAINMENU]="<li><a href=\"BASEURL/\" title=\"About this site\">home</a></li>
+ <li><a href=\"BASEURL/atom.xml\" title=\"Receive updates in your feed reader\">feed</a></li>"
+TVARS[TRACKERCODE]="" # google analytics or piwik.
+TVARS[RIGHTBAR]="<div class=\"outright\"><h3>Blogroll</h3>
+   <ul>
+<li><a href=\"http://slashdot.org/\">slashdot</a></li>
+<li><a href=\"http://news.ycombinator.com/\">hackernews</a></li>
+   </ul>
+</div>"
+
+TVARS[SEARCHSITE]="$(echo ${TVARS[BASEURL]} | cut -d/ -f3)"
+TVARS[SEARCHPATH]="$(echo ${TVARS[BASEURL]} | cut -d/ -f4-)"
+
+### system config
+BASEDIR=$HOME/other/blog
+ITEMMAX=15
+TMPDIR="$BASEDIR/tmp" # must exist!
+ATOMFILE="atom.xml"
+HTMLFILE="index.html"
+SITEMAPFILE="sitemap.xml"
+BASEURL=${TVARS[BASEURL]}

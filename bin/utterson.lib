@@ -1,5 +1,7 @@
 #!/usr/bin/ksh
 
+TVARS[GENBLOGVERSION]="utterson v0.2"
+
 runtpl() {
     # runs m4 on the tpl found in ${BASEDIR}/layout/$1/$2, using all
     # variables in TVARS

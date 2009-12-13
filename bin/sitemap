@@ -16,7 +16,7 @@
 #
 # (C) 2009 by Stefan Marsiske, <stefan.marsiske@gmail.com>
 
-. ${0%%/*}/utterson.cfg
+. ${0%%/*}/../cfg/utterson.cfg
 . ${0%%/*}/utterson.lib
 
 postslen=${#@}

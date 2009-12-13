@@ -5,19 +5,6 @@ NEWERPOSTS OLDERPOSTS
 <div style="text-align: center">
     <a class="inline-button grey" href="http://creativecommons.org/licenses/by-sa/3.0/"><em>CC</em><span> BY-SA</span></a>
     <a class="inline-button orange" href="BASEURL/atom.xml"><em>RSS</em><span> Export</span></a>
-    <!--<a class="inline-button blue" href="http://validator.w3.org/check?uri=POSTURL"><em>W3C</em><span>XHTML&nbsp;1.0</span></a>-->
-    <a class="inline-button green" href="http://jigsaw.w3.org/css-validator/"><em>CSS</em><span> 3.0</span></a>
 </div>
-<!-- Piwik -->
-<script type="text/javascript">
-var pkBaseURL = (("https:" == document.location.protocol) ? "https://www.ctrlc.hu/~stef/piwik/" : "http://www.ctrlc.hu/~stef/piwik/");
-document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
-</script><script type="text/javascript">
-try {
-var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
-piwikTracker.trackPageView();
-piwikTracker.enableLinkTracking();
-} catch( err ) {}
-</script><noscript><p><img src="http://www.ctrlc.hu/~stef/piwik/piwik.php?idsite=1" style="border:0" alt=""/></p></noscript>
-<!-- End Piwik Tag -->
+TRACKERCODE
 </body></html>

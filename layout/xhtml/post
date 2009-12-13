@@ -6,9 +6,9 @@
  <meta name="description" content="BLOGDESC" />
  <meta name="viewport" content="width=800" />
  <meta name="DC.title" content="PAGETITLE" />
- <meta name="DC.subject" content="copyright culture development europe freedom freesoftware government history hungarian innovation internet" />
- <meta name="DC.creator" content="Stefan Marsiske" />
- <link rel="Shortcut Icon" href="/~stef/favicon.png" type="image/png" />
+ <meta name="DC.subject" content="SUBJECT" />
+ <meta name="DC.creator" content="AUTHOR" />
+ <link rel="Shortcut Icon" href="FAVICON" type="image/png" />
  <link rel="stylesheet" type="text/css" href="../main.css" />
  <link rel="alternate" href="BASEURL/atom.xml" type="application/atom+xml" title="BLOGTITLE" charset="utf-8" />
  <link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/" />
@@ -18,53 +18,20 @@
 <div id="hover">
    <h1><a href="BASEURL/" title="Link to top level"><img src="BLOGLOGO" style="height: 70px; vertical-align: middle;" alt="logo" />BLOGTITLE</a></h1>
 <ul id="tnav">
- <li><a href="BASEURL/" title="About this site">home</a></li>
- <li><a href="BASEURL/bookmarks.html" title="My Delicious Bookmarks">bookmarks</a></li>
- <li><a href="BASEURL/atom.xml" title="Receive updates in your feed reader">feed</a></li>
- <li><a href="http://github.com/stef" title="Browse some code">code</a></li>
- <li><a href="http://www.tvhelyett.hu/" title="Watch some flicks">videos</a></li>
+ MAINMENU
  <li><form action="http://www.google.com/search" name="searchbox" method="get" style="margin-left: 2em;">
     <input type="hidden" name="ie" value="utf-8" />
-    <input type="hidden" name="sitesearch" value="www.ctrlc.hu" />
+    <input type="hidden" name="sitesearch" value="SEARCHSITE" />
     <div><input class="search" maxlength="256" size="20" name="q" />
        <a href="javascript:document.searchbox.submit()" 
-          onclick="document.searchbox.q.value+=' inurl:~stef/blog/'; return true; ">
+          onclick="document.searchbox.q.value+=' inurl:SEARCHPATH'; return true; ">
          <img src="../images/srch.gif" alt="search" /></div>
       </a>
 </form></li>
 </ul>
 </div>
 <div class="hentry">
-<div class="outright">
-<div style="overflow:hidden; width: 100%"><a href="http://hspbp.org"><img src="http://hspbp.org/tiki-download_file.php?fileId=362&#038;display" class="alignnone" width="150" height="220" /></a></div>
-<h3><a href='http://del.icio.us/fdsa4321'>/dev/read</a></h3><div id="delicious-box" style="margin:0;padding:0;border:none;"> </div>
-         <script type="text/javascript" src="http://feeds.delicious.com/v1/json/fdsa4321?count=10"></script>
-         <script type="text/javascript">
-         function showImage(img){ return (function(){ img.style.display='inline'; }) }
-         var ul = document.createElement('ul');
-         for (var i=0, post; post = Delicious.posts[i]; i++) {
-            var li = document.createElement('li');
-            var a = document.createElement('a');
-            a.setAttribute('href', post.u);
-            a.appendChild(document.createTextNode(post.d));
-            li.appendChild(a);
-            ul.appendChild(li);
-         }
-         ul.setAttribute('id', 'delicious-list');
-         document.getElementById('delicious-box').appendChild(ul);
-         </script>
-      <div id="vodpod_recent_videos">Watch <a href="http://vodpod.com">videos</a> at Vodpod and other <a href="http://tvhelyetthu.vodpod.com">videos</a> from this collection.</div><script src="http://widgets.vodpod.com/javascripts/recent_videos.js?id=tvhelyetthu&options[theme]=sidebar4_white&tag_id=latest&title=tvhelyett.hu&"></script><h3>Blogroll</h3>
-
-   <ul>
-<li><a href="http://hspbp.org/">budapesti hackerspace</a></li>
-<li><a href="http://omnipotent.net/jquery.sparkline/">jQuery Sparkline</a></li>
-<li><a href="http://kormanybeszerzo.hu/">kormánybeszerző.hu</a></li>
-<li><a href="http://nyilt.org">nyilt.org</a></li>
-<li><a href="http://www.tvhelyett.hu/">tvhelyett.hu</a></li>
-<li><a href="http://visszaajovo.be/">Vissza a jövőbe</a></li>
-
-   </ul>
-</div>
+RIGHTBAR
   <h2>
      <a href="POSTURL" title="Permalink" rel="bookmark">
         <span class="entry-title">POSTTITLE</span>
@@ -82,19 +49,6 @@ NEWERPOSTS OLDERPOSTS
 <div style="text-align: center">
     <a class="inline-button grey" href="http://creativecommons.org/licenses/by-sa/3.0/"><em>CC</em><span> BY-SA</span></a>
     <a class="inline-button orange" href="BASEURL/atom.xml"><em>RSS</em><span> Export</span></a>
-    <!--<a class="inline-button blue" href="http://validator.w3.org/check?uri=POSTURL"><em>W3C</em><span>XHTML&nbsp;1.0</span></a>-->
-    <a class="inline-button green" href="http://jigsaw.w3.org/css-validator/"><em>CSS</em><span> 3.0</span></a>
 </div>
-<!-- Piwik -->
-<script type="text/javascript">
-var pkBaseURL = (("https:" == document.location.protocol) ? "https://www.ctrlc.hu/~stef/piwik/" : "http://www.ctrlc.hu/~stef/piwik/");
-document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
-</script><script type="text/javascript">
-try {
-var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
-piwikTracker.trackPageView();
-piwikTracker.enableLinkTracking();
-} catch( err ) {}
-</script><noscript><p><img src="http://www.ctrlc.hu/~stef/piwik/piwik.php?idsite=1" style="border:0" alt=""/></p></noscript>
-<!-- End Piwik Tag -->
+TRACKERCODE
 </body></html>

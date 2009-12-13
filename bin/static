@@ -22,7 +22,7 @@
 #
 # TODO tags, blog search
 
-. ${0%%/*}/utterson.cfg
+. ${0%%/*}/../cfg/utterson.cfg
 . ${0%%/*}/utterson.lib
 
 ########### start processing #############

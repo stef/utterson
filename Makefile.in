@@ -20,6 +20,10 @@
 
 maxposts=15
 TMPDIR=tmp
+LIVESITE=n1.ctrlc.hu:/home/stef/public/blog
+
+# END OF CONFIG OPTIONS
+
 SHELL:=/usr/bin/zsh
 allposts:=$(shell ls -t posts/*.html )
 newestposts:=$(shell ls -t posts/*.html | head -$(maxposts) )
@@ -95,6 +99,10 @@ clean:
 	rm -rf $(TMPDIR)/posts
 
 make:
-	ksh bin/makemake
+	rm Makefile
+	make -f Makefile.in Makefile
 
-.PHONY: static make
+install: all
+	rsync -vcaE -e ssh --delete $(TMPDIR)/* $(LIVESITE)
+
+.PHONY: all static make install clean
