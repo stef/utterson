@@ -14,9 +14,8 @@ h2. the easiest way to start
 @cd utterson@
 @mkdir tmp@
 @mkdir posts@
-@mkdir layout/static@
 @cp cfg/utterson.cfg.example cfg/utterson.cfg@
-@echo "&lt;p>Hello World&lt;/p>" >posts/first_post.html@
+@echo "<p>Hello World</p>" >posts/first_post.html@
 @make -f Makefile.in Makefile@
 @make posts archive atom sitemap@
 @ls tmp@
