@@ -1,0 +1,58 @@
+h1. Utterson
+
+is a bunch of scripts used for powering my blog, you could also call it a blog engine. Utterson currently supports creating paged listings of posts, separate pages for posts, an atom feed and sitemap support.
+
+The goals were
+* to make it as *simple* as possible: A blogauthor simply creates the raw html post content with his prefered editor (authors recommendation: emacs' muse mode.),
+* while using *only basic unix tools* (there are similar tools like blosxom, written in various scripting languages) With Utterson the html are assembled using the m4 macro processor, which is driven by a bunch of shell scripts, which in turn are controlled by a self-generating Makefile.
+* and *minimizing security risks* by creating only static files
+* *avoid server-side processing*.
+
+h2. Skeleton of an Utterson blog
+
+* _Makefile.in_ - the all knowing makefile template.
+* _posts_/ - the directory where you store all your raw posts in html format
+* _tmp_/ - the directory where the results will be stored
+* _bin_/ - the directory where the helper scripts are stored
+* _cfg_/ - the configuration directory
+* _layout_/ - templates for the xhtml, sitemap and atom targets
+
+optional project contents
+* _Makefile_ - generate this with 'make -f Makefile.in Makefile'
+* _COPYING_ - the AGPLv3 license
+* _drafts_/ - optional storage of drafts not to be published on make all
+
+Utterson is basically controlled by the makefile, if you don't have a makefile you should run 'make -f Makefile.in Makefile'. You have common targets like _clean, make, all, posts, atom, sitemap, index, pages, archives_ (index+pages). The install target rsyncs your _tmp_/ directory via ssh to the live site. You should edit the config variables on top of the _Makefile.in_ and regenerate your _Makefile_ to set up your own site.
+
+All input goes in _posts_/ , this means you create here html files containing only the body of the posts. The publishing date will be taken from the files timestamp, while the title will be taken from the filename. Easy, eh?
+
+When you have a proper makefile and you invoke the _all_ target, all output will be generated to _tmp_/. Since we're using make only those files will be regenerated that changed. E.g. when adding a new _post_, the _atom_, _sitemap_, _index_ and the _archive_ pages will be regenarated to reflect this change. A new file will be generated under _tmp/posts_ containing the permalink endpoint of the post. The _all_ target takes care of the complete blog, so afterwards it should be safe to invoke the _install_ target as well.
+
+The templates for the generated results can be found in _layout_/. Under _layout_/ you can find the templates for the _headers_, _footers_, _single page rendering_ and _list rendering_ of posts for _xhtml_, _sitemap_ and _atom_ targets. Anything contained in the _layout/static_ directory will be directly copied to the results, this way you can distribute your css and image files for example.
+
+The configuration of the blog can be found in _cfg/utterson.cfg_. The scripts search the current directory, ~/.config/utterson, /etc/utterson and the ../cfg directory relative to the location of the utterson shell scripts. Use this to adapt to your needs. For longer html snippets it's easier to put them into separate files under _cfg_/, and then set them in _utterson.cfg_ like this
+ TVARS[TRACKERCODE]="$(cat ${CFGDIR}/tracker.html)"
+
+The helper scripts doing the main work are in the _bin_/ directory.
+* _atom_: outputs an atomfeed for all posts given as parameters.
+* _index_: outputs an index page for all posts given as parameters.
+* _mailhandler_: converts an emailmsg to a file in posts/ (use with the supplied procmailrc for email support)
+* _post_: outputs a page containing one post, pointing to the prev+next posts, all three given as arguments.
+* _page_: outputs a continuation of the index page, params are current page name, next, prev pagename, the rest are the posts to be included on this particular page.
+* _sitemap_: generates a gzipped sitemap of all xhtml results.
+* _static_: simply copies the contents of layout/static to the results directory.
+* _utterson.lib_: the core of utterson, this handles the templating, configuration and various helper functions.
+* _wpmigrate_: experimental script to convert wordpress exports to utterson-style single post files. Attention: wp does not really contain xhtml, the results will be ugly.
+* _wptouch_: experimental script for updating the timestamps of posts according to a wp export xml file. This is handy, if you manually clean up the posts after a wpmigrate invocation.
+
+h2. the easiest way to start
+
+@git clone git://github.com/stef/utterson.git
+cd utterson
+mkdir tmp
+mkdir posts
+echo "<p>Hello World</p>" >posts/first_post.html
+make -f Makefile.in
+make all@
+
+
