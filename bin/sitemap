@@ -50,7 +50,7 @@ while [ $i -lt ${pagecnt} ]; do
     fname="${entry##*/}"
     tmp="${fname%.html}"
     TVARS[POSTUPDATED]="$(getRFCtime "$entry")"
-    TVARS[POSTURL]="posts/${fname// /_}"
+    TVARS[POSTURL]="${BASEURL}/${fname// /_}"
     runtpl sitemap item
     i=$((i+1))
 done
