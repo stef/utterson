@@ -10,15 +10,15 @@ The goals were
 
 h2. the easiest way to start
 
-@git clone git://github.com/stef/utterson.git@
-@cd utterson@
-@mkdir tmp@
-@mkdir posts@
-@cp cfg/utterson.cfg.example cfg/utterson.cfg@
-@echo "<p>Hello World</p>" >posts/first_post.html@
-@make -f Makefile.in Makefile@
-@make posts archive atom sitemap@
-@ls tmp@
+bc. git clone git://github.com/stef/utterson.git
+cd utterson
+mkdir tmp
+mkdir posts
+cp cfg/utterson.cfg.example cfg/utterson.cfg
+echo "<p>Hello World</p>" >posts/first_post.html
+make -f Makefile.in Makefile
+make posts archive atom sitemap
+ls tmp
 
 Now open up some of the files in _tmp_/ with a webbrowser. easy, eh? :)
 
@@ -36,16 +36,15 @@ optional project contents
 * _COPYING_ - the AGPLv3 license
 * _drafts_/ - optional storage of drafts not to be published on make all
 
-Utterson is basically controlled by the makefile, if you don't have a makefile you should run @make -f Makefile.in Makefile@. You have common targets like _clean, make, all, posts, atom, sitemap, index, pages, archives_ (index+pages). The install target rsyncs your _tmp_/ directory via ssh to the live site. You should edit the config variables on top of the _Makefile.in_ and regenerate your _Makefile_ to set up your own site.
+Utterson is basically controlled by the makefile, if you don't have a makefile you should run @make -f Makefile.in Makefile@. You have common targets like _clean, make, all, posts, atom, sitemap, index, pages, archives_ (index+pages). The install target rsyncs your _tmp_/ directory via ssh to the live site. You should edit the config variables on top of the _Makefile.in_ to set the destination of the install target and regenerate your _Makefile_ to set up your own site.
 
 All input goes in _posts_/ , this means you create here html files containing only the body of the posts. The publishing date will be taken from the files timestamp, while the title will be taken from the filename. Easy, yes?
 
-When you have a proper makefile and you invoke the _all_ target, all output will be generated to _tmp_/. Since we're using make only those files will be regenerated that changed. E.g. when adding a new _post_, the _atom_, _sitemap_, _index_ and the _archive_ pages will be regenarated to reflect this change. Unchanged posts are not regenerated, only the new post will be used to generate  the permalink endpoint of the post under _tmp/posts_. The _all_ target takes care of the complete blog, so afterwards it should be safe to invoke the _install_ target as well.
+When you have a proper makefile and you invoke the _all_ target, all output will be generated to _tmp_/. Since we're using make, only those files will be regenerated that have changed. E.g. when adding a new _post_, the _atom_, _sitemap_, _index_ and the _archive_ pages will be regenarated to reflect this change. Unchanged posts are not regenerated, only the new post will be used to generate  the permalink endpoint of the post under _tmp/posts_. The _all_ target takes care of the complete blog, so afterwards it should be safe to invoke the _install_ target as well, set the destination on top of the Makefile.in.
 
 If you want to change to look of the results, check the templates. These can be found in _layout_/. Here you can find the templates for the _headers_, _footers_, _single page rendering_ and _list rendering_ of posts for _xhtml_, _sitemap_ and _atom_ targets. Anything contained in the _layout/static_ directory will be directly copied to the results, this way you can distribute your css and image files for example. Static is automatically a dependency of all, remove this in the Makefile.in, if you do not have static files to distribute.
 
-The configuration of the blog can be found in _cfg/utterson.cfg_. The scripts search the current directory, ~/.config/utterson, /etc/utterson and the ../cfg directory relative to the location of the utterson shell scripts. Use this to adapt to your needs. For longer html snippets it's easier to put them into separate files under _cfg_/, and then set them in _utterson.cfg_ like this
- @TVARS[TRACKERCODE]="$(cat ${CFGDIR}/tracker.html)"@
+The configuration of the blog can be found in _cfg/utterson.cfg_. The scripts search the current directory, ~/.config/utterson, /etc/utterson and the ../cfg directory relative to the location of the utterson shell scripts. Use this to adapt to your needs. For longer html snippets it's easier to put them into separate files under _cfg_/, and then set them in _utterson.cfg_ like this @TVARS[TRACKERCODE]="$(cat ${CFGDIR}/tracker.html)"@
 
 The helper scripts doing the main work are in the _bin_/ directory.
 * _atom_: outputs an atomfeed for all posts given as parameters.
@@ -59,5 +58,30 @@ The helper scripts doing the main work are in the _bin_/ directory.
 * _wpmigrate_: *experimental* script to convert wordpress exports to utterson-style single post files. Attention: wp does not really contain xhtml, the results will be ugly. *careful* needs xmlstarlet as a dependency!
 * _wptouch_: *experimental* script for updating the timestamps of posts according to a wp export xml file. This is handy, if you manually clean up the posts after a wpmigrate invocation. - *careful* needs xmlstarlet as a dependency!
 * _procmailrc_: (*experimental*) use this if utterson is installed on the live site to support mailing in blogposts. Only blogposts are accepted, if they are signed using pgp by anyone known in the public keyring (which of course you control). Easy and secure authentication of content. :) The _bin/mailhandler_ script currently only creates a new post in _posts_/, but does not invoke the makefile to generate the new state of the blog. The workflow here is not quite clear yet. Also to sign a post is currently only supported using mutt, here's the macro from _my .muttrc_: @macro compose \CP     "Fgpg --clearsign --default-key <insert your own key>\ny"@
+* emacs support is due to some basic settings in init.el
 
-
+bc. ;; muse blog settings
+(defun my-muse-mode-hook ()
+  (setq auto-fill-mode t)
+  (flyspell-mode 1)
+  )
+(add-hook 'muse-mode-hook 'my-muse-mode-hook)
+(defvar muse-my-xhtml-markup-strings
+  (nconc
+   '((image-with-desc . "<img class=\"alignright\" title=\"%3%\" src=\"%1%.%2%\" alt=\"%3%\" width=\"300\" />")
+     muse-xhtml1.0-markup-regexps)))
+(muse-derive-style "just-body" "xhtml1.0"
+                   :header ""
+                   :strings 'muse-my-xhtml-markup-strings
+                   :footer "")
+(defun my-muse-publish ()
+  (interactive)
+  (muse-publish-file
+   (buffer-file-name)
+   "just-body"
+   (expand-file-name
+    (concat
+     (file-name-directory buffer-file-name)
+     "../posts/"))
+   ))
+(define-key muse-mode-map [f7] 'my-muse-publish)
