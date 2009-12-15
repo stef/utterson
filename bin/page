@@ -18,12 +18,15 @@
 
 . ${0%%/*}/utterson.lib
 
-[[ $# -lt 4 ]] && { echo "$0 <curpage> <prevpage> <nextpage> <posts...>"; exit 1; }
-HTMLFILE="$1"
+[[ $# -lt 4 ]] && { echo "$0 <subdir> <prevpage> <nextpage> <posts...>"; exit 1; }
+subdir="$1"
 NEXTPAGE="$2"
 PREVPAGE="$3"
 shift 3
 
+[[ -n "$subdir" ]] && {
+    TVARS[ATOMFEED]="$BASEURL/$subdir/atom.xml"
+}
 # write out headers
 runtpl xhtml header
 
@@ -34,7 +37,8 @@ for entry; do
     runtpl xhtml item
 done
 
-TVARS[POSTURL]="${BASEURL}/${HTMLFILE}"
+TVARS[NEWERPOSTS]=""
+TVARS[OLDERPOSTS]=""
 # calculates and provides navigation information (next/prev page)
 # link to newer archives
 [[ -n "${NEXTPAGE}" ]] &&

@@ -10,8 +10,8 @@
  <meta name="DC.creator" content="AUTHOR" />
  OTHERMETA
  <link rel="Shortcut Icon" href="FAVICON" type="image/png" />
- <link rel="stylesheet" type="text/css" href="main.css" />
- <link rel="alternate" href="BASEURL/atom.xml" type="application/atom+xml" title="BLOGTITLE" charset="utf-8" />
+ <link rel="stylesheet" type="text/css" href="BASEURL/main.css" />
+ <link rel="alternate" href="ATOMFEED" type="application/atom+xml" title="BLOGTITLE" charset="utf-8" />
  <link rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/us/" />
  <title>BLOGTITLE</title>
  </head><body>
