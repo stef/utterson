@@ -1,7 +1,6 @@
 #!/bin/zsh
 
 . ${0%%/*}/utterson.lib
-pages=""
 
 # this function creates rules for index.html+page-X...Z.html style archives
 # in the directory specified by the first parameter
