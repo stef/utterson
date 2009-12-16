@@ -64,10 +64,10 @@ function car {
 cp Makefile.in Makefile
 
 # create main index archive rules
-/bin/ls -t -x --quoting-style=shell posts/*.html | car ""
+/bin/ls -t -x posts/*.html | car ""
 
 # create tag rules
-for tag in $(ls --quoting-style=shell -x ${CFGDIR}/tags/); do
+for tag in $(ls -x ${CFGDIR}/tags/); do
 	tags="$tags tags/${tag}"
    car "tags/$tag" <${CFGDIR}/tags/${tag}
 done
@@ -76,7 +76,7 @@ echo
 
 #	create individual posts rules
 i=1
-set -A files $(/bin/ls -t -x --quoting-style=shell posts/*.html )
+set -A files $(/bin/ls -t -x posts/*.html )
 while [ ${#files[@]} -ge $i ]; do
 	#tname=posts/$$(f=$${files[i]##*posts/} ;echo $${f// /_} | urlencode)
 	tname="${files[i]}"

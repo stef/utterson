@@ -52,7 +52,7 @@ install: all
 	rsync -vcaE -e ssh --delete $(TMPDIR)/* $(LIVESITE)
 
 $(TMPDIR)/sitemap.xml.gz: posts archive
-   ksh bin/sitemap $(allposts) | gzip -c >tmp/sitemap.xml.gz
+	ksh bin/sitemap $(allposts) | gzip -c >tmp/sitemap.xml.gz
 
 .PHONY: all static make install clean atom sitemap
 
