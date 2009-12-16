@@ -14,7 +14,7 @@ else
 fi
 
 . ${CFGDIR}/utterson.cfg
-TVARS[GENBLOGVERSION]="utterson v0.2"
+TVARS[GENBLOGVERSION]="utterson v0.3"
 
 runtpl() {
     # runs m4 on the tpl found in ${BASEDIR}/layout/$1/$2, using all
