@@ -25,7 +25,6 @@ LIVESITE=n1.ctrlc.hu:/home/stef/public/blog
 
 # END OF CONFIG OPTIONS
 
-SHELL:=/usr/bin/zsh
 allposts:=$(shell ls -t posts/*.html )
 
 # if you don't have static content, remove it as a target
@@ -39,11 +38,15 @@ static: layout/static/*
 	ksh bin/static $^
 
 Makefile: $(allposts)
-	zsh bin/makemake >>$@
+	ksh bin/makemake >>$@
 
 clean:
-	rm $(TMPDIR)/*.(html|xml|gz|css)
-	rm -rf $(TMPDIR)/posts $(TMPDIR)/tags
+	rm $(TMPDIR)/index.html
+	rm $(TMPDIR)/page*.html
+	rm $(TMPDIR)/atom.xml
+	rm $(TMPDIR)/sitemap.xml.gz
+	rm -rf $(TMPDIR)/posts
+	rm -rf $(TMPDIR)/tags
 
 make:
 	rm Makefile
