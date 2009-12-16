@@ -29,6 +29,7 @@ runtpl atom header
 # process posts
 for entry; do
     tvarinit
+    TVARS[POSTURL]="${BASEURL}/posts/$(echo ${entry##posts/} | urlencode)"
     runtpl atom item
 done
 

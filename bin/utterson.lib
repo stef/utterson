@@ -42,8 +42,7 @@ getRFCtime() {
 # also wp has some image captioning syntax that we need to handle
 # maybe we can add some other "plugins" as well.
 filter() {
-    # TODO add vimeo handling as well, see manifeszto.html
-    sed 's/[[]youtube=http:[/][/]www.youtube.com[/]watch[?]v=\(.*\)]/<object type="application\/x-shockwave-flash" data="http:\/\/www.youtube.com\/v\/\1&hl=en" width="640" height="534"><param name="movie" value="http:\/\/www.youtube.com\/v\/\1&hl=en" \/><param name="FlashVars" value="playerMode=embedded" \/><param name="wmode" value="transparent" \/><\/object>/;s/\[caption .* align="align\(.*\)" width="[0-9]*" caption="\(.*\)"\]\(.*\)\[\/caption]/<div class="image align\1">\3<p class="caption-text">\2<\/p><\/div>/g' "$1"
+    sed 's/[[]youtube=http:[/][/]www.youtube.com[/]watch[?]v=\(.*\)]/<object type="application\/x-shockwave-flash" data="http:\/\/www.youtube.com\/v\/\1&hl=en" width="640" height="534"><param name="movie" value="http:\/\/www.youtube.com\/v\/\1&hl=en" \/><param name="FlashVars" value="playerMode=embedded" \/><param name="wmode" value="transparent" \/><\/object>/g; s/\[caption .* align="align\(.*\)" width="[0-9]*" caption="\(.*\)"\]\(.*\)\[\/caption]/<div class="image align\1">\3<p class="caption-text">\2<\/p><\/div>/g; s/[[]vimeo=http://vimeo.com/\([0-9]*\).*]/<object width="640" height="534"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=\1&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id=\1&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="640" height="534"></embed></object>' "$1"
 }
 
 getpostfile() {
@@ -53,28 +52,12 @@ getpostfile() {
 
 urlencode() {
    sed -E -e 's/%/%25/g' -e 's/ /%20/g' -e 's/"/%22/g' -e 's/#/%23/g' \
-   -e 's/&/%26/g' -e 's/</%3C/g' -e 's/>/%3E/g' -e 's/\{/%7B/g' -e 's/}/%7D/g' -e 's/\|/%7C/g' \
-   -e 's/\\/%5C/g' -e 's/\^/%5E/g' -e 's/\~/%7E/g' -e 's/\[/%5B/g' -e 's/\]/%5D/g' \
-   -e s/$'\342\202\254'/%80/g -e s/$'\303\274'/%FC/g -e s/$'\302\243'/%A3/g -e s/$'\303\266'/%F6/g \
-   -e s/$'ő'/%C5%91/g -e s/$'Ő'/%C5%90/g -e s/$'ű'/%C5%B1/g -e s/$'Ű'/%C5%B1/g \
-   -e s/$'\303\251'/%E9/g -e s/$'\303\244'/%E4/g -e s/$'\303\204'/%C4/g -e s/$'\303\226'/%D6/g \
-   -e s/$'\303\234'/%DC/g -e s/$'\303\237'/%DF/g -e s/$'\303\240'/%E0/g -e s/$'\303\241'/%E1/g \
-   -e s/$'\303\242'/%E2/g -e s/$'\303\247'/%E7/g -e s/$'\303\250'/%E8/g -e s/$'\303\252'/%EA/g \
-   -e s/$'\303\253'/%EB/g -e s/$'\303\254'/%EC/g -e s/$'\303\255'/%ED/g -e s/$'\303\256'/%EE/g \
-   -e s/$'\303\257'/%EF/g -e s/$'\303\200'/%C0/g -e s/$'\303\201'/%C1/g -e s/$'\303\202'/%C2/g \
-   -e s/$'\303\207'/%C7/g -e s/$'\303\210'/%C8/g -e s/$'\303\211'/%C9/g -e s/$'\303\212'/%CA/g \
-   -e s/$'\303\213'/%CB/g -e s/$'\303\214'/%CC/g -e s/$'\303\215'/%CD/g -e s/$'\303\216'/%CE/g \
-   -e s/$'\303\217'/%CF/g -e s/$'\303\277'/%BF/g -e s/$'\303\203'/%C3/g -e s/$'\303\205'/%C5/g \
-   -e s/$'\303\206'/%C6/g -e s/$'\303\220'/%D0/g -e s/$'\303\221'/%D1/g -e s/$'\303\245'/%E5/g \
-   -e s/$'\303\246'/%E6/g -e s/$'\303\261'/%F1/g -e s/$'\303\262'/%F2/g -e s/$'\303\263'/%F3/g \
-   -e s/$'\303\264'/%F4/g -e s/$'\303\265'/%F5/g -e s/$'\303\267'/%F7/g -e s/$'\303\270'/%F8/g \
-   -e s/$'\303\271'/%F9/g -e s/$'\303\272'/%FA/g -e s/$'\303\273'/%FB/g -e s/$'\303\275'/%FD/g \
-   -e s/$'\303\276'/%FE/g -e s/$'\303\277'/%FF/g -e s/$'\303\235'/%DD/g -e s/$'\303\236'/%DE/g \
-   -e s/$'\305\241'/%9A/g -e s/$'\305\223'/%9C/g -e s/$'\305\276'/%9E/g -e s/$'\305\270'/%9F/g \
-   -e s/$'\302\265'/%B5/g -e s/$'\305\275'/%8E/g -e s/$'\305\240'/%8C/g -e s/$'\302\241'/%A1/g \
-   -e s/$'\302\242'/%A2/g -e s/$'\302\245'/%A5/g -e s/$'\303\243'/%E3/g -e s/$'\303\260'/%F0/g \
-   -e s/$'\303\222'/%D2/g -e s/$'\303\223'/%D3/g -e s/$'\303\224'/%D4/g -e s/$'\303\225'/%D5/g \
-   -e s/$'\303\230'/%D8/g -e s/$'\303\223'/%D9/g -e s/$'\303\232'/%DA/g -e s/$'\303\233'/%DB/g
+       -e 's/&/%26/g' -e 's/</%3C/g' -e 's/>/%3E/g' -e 's/\{/%7B/g' -e 's/}/%7D/g' -e 's/\|/%7C/g' \
+       -e 's/\\/%5C/g' -e 's/\^/%5E/g' -e 's/\~/%7E/g' -e 's/\[/%5B/g' -e 's/\]/%5D/g' \
+       -e s/$'á'/%C3%A1/g -e s/$'Á'/%C3%81/g -e s/$'é'/%C3%A9/g -e s/$'É'/%C3%89/g -e s/$'í'/%C3%AD/g \
+       -e s/$'Í'/%C3%8D/g -e s/$'ó'/%C3%B3/g -e s/$'Ó'/%C3%93/g -e s/$'ö'/%C3%B6/g -e s/$'Ö'/%C3%96/g \
+       -e s/$'ő'/%C5%91/g -e s/$'Ő'/%C5%90/g -e s/$'ú'/%C3%BA/g -e s/$'Ú'/%C3%9A/g -e s/$'ü'/%C3%BC/g \
+       -e s/$'Ü'/%C3%9C/g -e s/$'ű'/%C5%B1/g -e s/$'Ű'/%C5%B0/g
 }
 
 tvarinit() {

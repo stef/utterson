@@ -77,7 +77,6 @@ echo
 i=0
 set -A files $(/bin/ls -t -x posts/*.html )
 while [ ${#files[@]} -gt $i ]; do
-	#tname=posts/$$(f=$${files[i]##*posts/} ;echo $${f// /_} | urlencode)
 	tname="${files[i]}"
    if [[ $i -eq 0 ]]; then prevf=""
    else prevf=${files[i-1]}; fi
