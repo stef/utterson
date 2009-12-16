@@ -1,5 +1,5 @@
 # -*- make -*-
-# FILE: "blog/Makefile"
+# FILE: "blog/Makefile.in"
 #    This file is part of utterson.
 
 #    utterson is free software: you can redistribute it and/or modify
@@ -25,30 +25,21 @@ LIVESITE=n1.ctrlc.hu:/home/stef/public/blog
 
 # END OF CONFIG OPTIONS
 
-SHELL:=/usr/bin/zsh
 allposts:=$(shell ls -t posts/*.html )
 newestposts:=$(shell ls -t posts/*.html | head -$(maxposts) )
 
-# move all files afterwards to www
-
 # if you don't have static content, remove it as a target
-all: posts archive atom sitemap static
+all: posts archive atom sitemap static tags
 
-index: $(TMPDIR)/index.html
 atom: $(TMPDIR)/atom.xml
+
 sitemap: $(TMPDIR)/sitemap.xml.gz
-
-$(TMPDIR)/index.html: $(newestposts)
-	ksh bin/index $^ >$@
-
-$(TMPDIR)/atom.xml: $(newestposts)
-	ksh bin/atom $^ >$@
 
 static: layout/static/*
 	ksh bin/static $^
 
 Makefile: $(allposts)
-	ksh bin/makemake
+	zsh bin/makemake >>$@
 
 clean:
 	rm $(TMPDIR)/*.(html|xml|gz|css)
@@ -61,4 +52,8 @@ make:
 install: all
 	rsync -vcaE -e ssh --delete $(TMPDIR)/* $(LIVESITE)
 
-.PHONY: all static make install clean
+$(TMPDIR)/sitemap.xml.gz: posts archive
+   ksh bin/sitemap $(allposts) | gzip -c >tmp/sitemap.xml.gz
+
+.PHONY: all static make install clean atom sitemap
+
