@@ -26,7 +26,6 @@ LIVESITE=n1.ctrlc.hu:/home/stef/public/blog
 # END OF CONFIG OPTIONS
 
 allposts:=$(shell ls -t posts/*.html )
-newestposts:=$(shell ls -t posts/*.html | head -$(maxposts) )
 
 # if you don't have static content, remove it as a target
 all: posts archive atom sitemap static tags

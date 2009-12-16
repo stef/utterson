@@ -65,9 +65,6 @@ cp Makefile.in Makefile
 
 # create main index archive rules
 /bin/ls -t -x --quoting-style=shell posts/*.html | car ""
-echo "\$(TMPDIR)/sitemap.xml.gz: posts archive"
-echo "	ksh bin/sitemap "'$'"(allposts) | gzip -c >tmp/sitemap.xml.gz"
-echo
 
 # create tag rules
 for tag in $(ls --quoting-style=shell -x ${CFGDIR}/tags/); do
