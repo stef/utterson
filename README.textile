@@ -1,6 +1,6 @@
 h1. Utterson
 
-is a bunch of scripts used for powering my blog, you could also call it a blog engine or blog compiler. Utterson currently supports creating paged listings of posts, separate pages for posts, an atom feed and sitemap support.
+is a bunch of scripts used for powering my blog, you could also call it a blog engine or blog compiler. Utterson currently supports creating paged listings of posts with an atom feed, separate pages for posts, handling of tags with their own atom feeds and sitemap support.
 
 The goals were
 * to make it as *simple* as possible: A blogauthor simply creates the raw html post content with his prefered editor (authors recommendation: emacs' muse mode.),
@@ -39,6 +39,8 @@ h3. config
 
 The configuration of the blog can be found in _cfg/utterson.cfg_. The scripts search the current directory, ~/.config/utterson, /etc/utterson and the ../cfg directory relative to the location of the utterson shell scripts. Use this to adapt to your needs. For longer html snippets it's easier to put them into separate files under _cfg_/, and then set them in _utterson.cfg_ like this @TVARS[TRACKERCODE]="$(cat ${CFGDIR}/tracker.html)"@
 
+*Tags* are stored under cfg/tags/ each tag lists all posts in order - that means usually new posts go to the top of this file.
+
 h3. templates
 
 If you want to change to look of the results, check the templates. These can be found in _layout_/. Here you can find the templates for the _headers_, _footers_, _single page rendering_ and _list rendering_ of posts for _xhtml_, _sitemap_ and _atom_ targets. Anything contained in the _layout/static_ directory will be directly copied to the results, this way you can distribute your css and image files for example. Static is automatically a dependency of all, remove this in the Makefile.in, if you do not have static files to distribute.
@@ -53,9 +55,9 @@ When you have a proper makefile and you invoke the _all_ target, the blog will b
 
 h3. Makefile
 
-Utterson is basically controlled by the makefile, if you don't have a makefile you should run @make -f Makefile.in Makefile@. You have common targets like _clean, make, all, posts, atom, sitemap, index, pages, archives_ (index+pages). The _install_ target rsyncs your _tmp_/ directory via ssh to the live site. You should edit the config variables on top of the _Makefile.in_ to set the destination of the _install_ target and regenerate your _Makefile_ to set up your own site.
+Utterson is basically controlled by the makefile, if you don't have a makefile you should run @make -f Makefile.in Makefile@. You have common targets like _clean, make, all, posts, atom, sitemap, archive, tags, static. The _install_ target rsyncs your _tmp_/ directory via ssh to the live site. You should edit the config variables on top of the _Makefile.in_ to set the destination of the _install_ target and regenerate your _Makefile_ to set up your own site.
 
-h3. binaries
+h3. Binaries
 
 The helper scripts doing the main work are in the _bin_/ directory.
 
@@ -63,17 +65,13 @@ h4. atom
 
 outputs an atomfeed for all posts given as parameters.
 
-h4. index
-
-outputs an index page for all posts given as parameters.
-
 h4. post
 
 outputs a page containing one post, pointing to the prev+next posts, all three given as arguments.
 
 h4. page
 
-outputs a continuation of the index page, params are current page name, next, prev pagename, the rest are the posts to be included on this particular page.
+outputs an index page, params are current page name, next, prev pagename, the rest are the posts to be included on this particular page.
 
 h4. sitemap
 
@@ -82,6 +80,10 @@ generates a gzipped sitemap of all xhtml results.
 h4. static
 
 simply copies the contents of layout/static to the results directory.
+
+h4. makemake
+
+Helper script used by the Makefile target. Generates portions of the makefile taking the contents of posts/ into account. The makefile must be regenerated if you ad a new post or tag.
 
 h4. utterson.lib
 
