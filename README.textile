@@ -11,22 +11,20 @@ h2. the easiest way to start
 
 bc. git clone git://github.com/stef/utterson.git
 cd utterson
-mkdir tmp
-mkdir posts
 cp cfg/utterson.cfg.example cfg/utterson.cfg
 echo "<p>Hello World</p>" >posts/first_post.html
 make -f Makefile.in Makefile
 make posts archive atom sitemap
-ls tmp
+ls blog
 
-Now open up some of the files in _tmp_/ with a webbrowser. easy, eh? :)
+Now open up some of the files in _blog_/ with a webbrowser. easy, eh? :)
 
 h2. Details
 
 * _cfg/utterson.cfg_ - the configuration file
 * _posts_/ - the directory where you store all your raw posts in html format (must be created on setup!) - it's recommended to handle this via a separate git repo.
 * _layout_/ - templates for the xhtml, sitemap and atom targets
-* _tmp_/ - the directory where the results will be stored (must be created on setup!)
+* _blog_/ - the directory where the results will be stored
 * _Makefile.in_ - the all knowing makefile template.
 * _bin_/ - the directory where the helper scripts are stored
 
@@ -51,11 +49,11 @@ All input goes in _posts_/. You create here html files containing only the body 
 
 h3. make blog
 
-When you have a proper makefile and you invoke the _all_ target, the blog will be generated into _tmp_/. Since we're using make, only those files will be regenerated that have changed. E.g. when adding a new _post_, the _atom_, _sitemap_, _index_ and the _archive_ pages will be regenarated to reflect this change. Unchanged posts are not regenerated, only the new post will be used to generate  the permalink endpoint of the post under _tmp/posts_. The _all_ target takes care of the complete blog, so afterwards it should be safe to invoke the _install_ target as well, set the destination on top of the Makefile.in.
+When you have a proper makefile and you invoke the _all_ target, the blog will be generated into _blog_/. Since we're using make, only those files will be regenerated that have changed. E.g. when adding a new _post_, the _atom_, _sitemap_, _index_, some tags pages and the _archive_ pages will be regenarated to reflect this change. Unchanged posts are not regenerated, only the new post will be used to generate  the permalink endpoint of the post under _blog/posts_. The _all_ target takes care of the complete blog, so afterwards it should be safe to invoke the _install_ target as well, set the destination on top of the Makefile.in.
 
 h3. Makefile
 
-Utterson is basically controlled by the makefile, if you don't have a makefile you should run @make -f Makefile.in Makefile@. You have common targets like _clean, make, all, posts, atom, sitemap, archive, tags, static. The _install_ target rsyncs your _tmp_/ directory via ssh to the live site. You should edit the config variables on top of the _Makefile.in_ to set the destination of the _install_ target and regenerate your _Makefile_ to set up your own site.
+Utterson is basically controlled by the makefile, if you don't have a makefile you should run @make -f Makefile.in Makefile@. You have common targets like _clean, make, all, posts, atom, sitemap, archive, tags, static. The _install_ target rsyncs your _blog_/ directory via ssh to the live site. You should edit the config variables on top of the _Makefile.in_ to set the destination of the _install_ target and regenerate your _Makefile_ to set up your own site.
 
 h3. Binaries
 

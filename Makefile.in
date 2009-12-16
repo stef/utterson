@@ -19,7 +19,7 @@
 # $Id:$
 
 maxposts=15
-TMPDIR=tmp
+TMPDIR=blog
 CFGDIR=cfg
 LIVESITE=n1.ctrlc.hu:/home/stef/public/blog
 
@@ -56,7 +56,7 @@ install: all
 	rsync -vcaE -e ssh --delete $(TMPDIR)/* $(LIVESITE)
 
 $(TMPDIR)/sitemap.xml.gz: $(allposts)
-	ksh bin/sitemap $(allposts) | gzip -c >tmp/sitemap.xml.gz
+	ksh bin/sitemap $(allposts) | gzip -c >$@
 
 .PHONY: all static make install clean atom sitemap
 
