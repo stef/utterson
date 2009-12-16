@@ -25,7 +25,7 @@ tvarinit
 TVARS[NEWERPOSTS]=""
 TVARS[OLDERPOSTS]=""
 [[ -n $2 ]] &&
-    TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$BASEURL/$2\">next posts</a></div>"
+    TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$BASEURL/$2\">next posts ></a></div>"
 [[ -n $3 ]] &&
-    TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"$BASEURL/$3\">prev post</a></div>"
+    TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"$BASEURL/$3\">&lt; prev post</a></div>"
 runtpl xhtml post

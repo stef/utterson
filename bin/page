@@ -42,10 +42,10 @@ TVARS[OLDERPOSTS]=""
 # calculates and provides navigation information (next/prev page)
 # link to newer archives
 [[ -n "${NEXTPAGE}" ]] &&
-    TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$NEXTPAGE\">next posts</a></div>"
+    TVARS[NEWERPOSTS]="<div class=\"newer\"><a href=\"$NEXTPAGE\">next posts ></a></div>"
 # link to older archives
 [[ -n "${PREVPAGE}" ]] &&
-    TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"$PREVPAGE\">prev posts</a></div>"
+    TVARS[OLDERPOSTS]="<div class=\"older\"><a href=\"$PREVPAGE\">&lt; prev posts</a></div>"
 
 runtpl xhtml footer
 
