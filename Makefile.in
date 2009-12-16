@@ -25,6 +25,7 @@ LIVESITE=n1.ctrlc.hu:/home/stef/public/blog
 
 # END OF CONFIG OPTIONS
 
+SHELL:=/usr/bin/zsh
 allposts:=$(shell ls -t posts/*.html )
 
 # if you don't have static content, remove it as a target
