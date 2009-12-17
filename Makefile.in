@@ -18,17 +18,14 @@
 # (C) 2009 by Stefan Marsiske, <stefan.marsiske@gmail.com>
 # $Id:$
 
-maxposts=15
-TMPDIR=blog
-CFGDIR=cfg
-LIVESITE=n1.ctrlc.hu:/home/stef/public/blog
+include cfg/make.cfg
 
 # END OF CONFIG OPTIONS
 
 allposts:=$(shell ls -t posts/*.html )
 
 # if you don't have static content, remove it as a target
-all: posts archive atom sitemap static tags
+all: posts archive atom sitemap tags static
 
 atom: $(TMPDIR)/atom.xml
 
@@ -58,5 +55,5 @@ install: all
 $(TMPDIR)/sitemap.xml.gz: $(allposts)
 	ksh bin/sitemap $(allposts) | gzip -c >$@
 
-.PHONY: all static make install clean atom sitemap
+.PHONY: all static make install clean atom sitemap tags
 
