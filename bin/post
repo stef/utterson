@@ -18,7 +18,7 @@
 
 . ${0%%/*}/utterson.lib
 
-entry=$1
+entry="$1"
 tvarinit
 
 # calculate permalink end-point
