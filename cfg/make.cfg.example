@@ -1,0 +1,2 @@
+TMPDIR=blog
+LIVESITE=www.example.com:/home/joe/public_html/blog

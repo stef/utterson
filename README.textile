@@ -51,7 +51,7 @@ All input goes in _posts_/. You create here html files containing only the body 
 
 h3. make blog
 
-When you have a proper makefile and you invoke the _all_ target, the blog will be generated into _blog_/. Since we're using make, only those files will be regenerated that have changed. E.g. when adding a new _post_, the _atom_, _sitemap_, _index_, some tags pages and the _archive_ pages will be regenarated to reflect this change. Unchanged posts are not regenerated, only the new post will be used to generate  the permalink endpoint of the post under _blog/posts_. The _all_ target takes care of the complete blog, so afterwards it should be safe to invoke the _install_ target as well, set the destination on top of the Makefile.in.
+When you have a proper makefile and you invoke the _all_ target, the blog will be generated into _blog_/. Since we're using make, only those files will be regenerated that have changed. E.g. when adding a new _post_, the _atom_, _sitemap_, _index_, some tags pages and the _archive_ pages will be regenarated to reflect this change. Unchanged posts are not regenerated, only the new post will be used to generate  the permalink endpoint of the post under _blog/posts_. The _all_ target takes care of the complete blog, so afterwards it should be safe to invoke the _install_ target as well, set the destination in _cfg/make.cfg_.
 
 h3. Makefile
 
