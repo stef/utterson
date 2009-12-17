@@ -15,7 +15,7 @@ cd utterson
 cp cfg/utterson.cfg.example cfg/utterson.cfg
 echo "<p>Hello World</p>" >posts/first_post.html
 make -f Makefile.in Makefile
-make posts archive atom sitemap
+make all
 ls blog
 
 Now open up some of the files in _blog_/ with a webbrowser. easy, eh? :)
@@ -23,6 +23,7 @@ Now open up some of the files in _blog_/ with a webbrowser. easy, eh? :)
 h2. Details
 
 * _cfg/utterson.cfg_ - the configuration file
+* _cfg/tags/<tag>_ - lists all posts in the order to be rendered in the listings and atom feed - newest first.
 * _posts_/ - the directory where you store all your raw posts in html format (must be created on setup!) - it's recommended to handle this via a separate git repo.
 * _layout_/ - templates for the xhtml, sitemap and atom targets
 * _blog_/ - the directory where the results will be stored
@@ -38,11 +39,11 @@ h3. config
 
 The configuration of the blog can be found in _cfg/utterson.cfg_. The scripts search the current directory, ~/.config/utterson, /etc/utterson and the ../cfg directory relative to the location of the utterson shell scripts. Use this to adapt to your needs. For longer html snippets it's easier to put them into separate files under _cfg_/, and then set them in _utterson.cfg_ like this @TVARS[TRACKERCODE]="$(cat ${CFGDIR}/tracker.html)"@
 
-*Tags* are stored under cfg/tags/ each tag lists all posts in order - that means usually new posts go to the top of this file.
+*Tags* are stored under cfg/tags/ each tag lists all posts in order - that means usually new posts go to the top of this file. The posts should also contain the 'post/' directory prefixed to the filename.
 
 h3. templates
 
-If you want to change to look of the results, check the templates. These can be found in _layout_/. Here you can find the templates for the _headers_, _footers_, _single page rendering_ and _list rendering_ of posts for _xhtml_, _sitemap_ and _atom_ targets. Anything contained in the _layout/static_ directory will be directly copied to the results, this way you can distribute your css and image files for example. Static is automatically a dependency of all, remove this in the Makefile.in, if you do not have static files to distribute.
+If you want to change to look of the results, check the templates. These can be found in _layout_/. Here you can find the templates for the _headers_, _footers_, _single page rendering_ and _list rendering_ of posts for _xhtml_, _sitemap_ and _atom_ targets. Anything contained in the _layout/static_ directory will be directly copied to the results, this way you can distribute your css and image files for example.
 
 h3. writing posts
 
@@ -56,7 +57,7 @@ h3. Makefile
 
 Utterson is basically controlled by the makefile, if you don't have a makefile you should run @make -f Makefile.in Makefile@. You have common targets like _clean, make, all, posts, atom, sitemap, archive, tags, static. The _install_ target rsyncs your _blog_/ directory via ssh to the live site. You should edit the config variables on top of the _Makefile.in_ to set the destination of the _install_ target and regenerate your _Makefile_ to set up your own site.
 
-h3. Binaries
+h3. Scripts
 
 The helper scripts doing the main work are in the _bin_/ directory.
 
@@ -90,11 +91,11 @@ the core of utterson, this handles the templating, configuration and various hel
 
 h4. wpmigrate
 
-*experimental* script to convert wordpress exports to utterson-style single post files. Attention: wp does not really contain xhtml, the results will be ugly. *careful* needs xmlstarlet as a dependency!
+*experimental* script to convert wordpress exports to utterson-style single post files. Attention: wp does not really contain xhtml, the results will be ugly. - *careful*: needs xmlstarlet as a dependency!
 
 h4. wptouch
 
-*experimental* script for updating the timestamps of posts according to a wp export xml file. This is handy, if you manually clean up the posts after a wpmigrate invocation. - *careful* needs xmlstarlet as a dependency!
+*experimental* script for updating the timestamps of posts according to a wp export xml file. This is handy, if you manually clean up the posts after a wpmigrate invocation. - *careful*: needs xmlstarlet as a dependency!
 
 h4. mailhandler
 
