@@ -22,9 +22,6 @@ include cfg/make.cfg
 
 # END OF CONFIG OPTIONS
 
-allposts:=$(shell ls -t posts/*.html )
-
-# if you don't have static content, remove it as a target
 all: posts archive atom sitemap tags static
 
 atom: $(TMPDIR)/atom.xml
@@ -34,16 +31,12 @@ sitemap: $(TMPDIR)/sitemap.xml.gz
 static: layout/static/*
 	ksh bin/static $^
 
-Makefile: $(allposts)
+Makefile: $(shell cat liveposts)
 	ksh bin/makemake >>$@
 
 clean:
-	rm $(TMPDIR)/index.html
-	rm $(TMPDIR)/page*.html
-	rm $(TMPDIR)/atom.xml
-	rm $(TMPDIR)/sitemap.xml.gz
-	rm -rf $(TMPDIR)/posts
-	rm -rf $(TMPDIR)/tags
+	rm $(TMPDIR)/index.html $(TMPDIR)/page-*.html $(TMPDIR)/atom.xml $(TMPDIR)/sitemap.xml.gz
+	rm -rf $(TMPDIR)/posts $(TMPDIR)/tags
 
 make:
 	rm Makefile
@@ -52,8 +45,11 @@ make:
 install: all
 	rsync -vcaE -e ssh --delete $(TMPDIR)/* $(LIVESITE)
 
-$(TMPDIR)/sitemap.xml.gz: $(allposts)
-	ksh bin/sitemap $(allposts) | gzip -c >$@
+$(TMPDIR)/sitemap.xml.gz: $(shell cat liveposts)
+	ksh bin/sitemap <liveposts | gzip -c >$@
+
+liveposts:
+	ls -t posts/*.html >$@
 
 .PHONY: all static make install clean atom sitemap tags
 

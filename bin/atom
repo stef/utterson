@@ -21,16 +21,18 @@
 postslen=${#@}
 
 # get timestamp of very last post for rss
-TVARS[LASTUPDATED]="$(getRFCtime "${1}")"
+read entry || exit 1
+TVARS[LASTUPDATED]="$(getRFCtime "${entry}")"
 
 #### MAIN LOOP STARTS HERE ####
 
 runtpl atom header
 # process posts
-for entry; do
+while true; do
     tvarinit
     TVARS[POSTURL]="${BASEURL}/posts/$(echo ${entry##posts/} | urlencode)"
     runtpl atom item
+    read entry || break
 done
 
 runtpl atom footer

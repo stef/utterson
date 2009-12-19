@@ -18,11 +18,10 @@
 
 . ${0%%/*}/utterson.lib
 
-[[ $# -lt 4 ]] && { echo "$0 <subdir> <prevpage> <nextpage> <posts...>"; exit 1; }
+[[ $# -lt 3 ]] && { echo "$0 <subdir> <prevpage> <nextpage>"; exit 1; }
 subdir="$1"
 NEXTPAGE="$2"
 PREVPAGE="$3"
-shift 3
 
 [[ -n "$subdir" ]] && {
     TVARS[ATOMFEED]="$BASEURL/$subdir/atom.xml"
@@ -31,7 +30,7 @@ shift 3
 runtpl xhtml header
 
 # process posts
-for entry; do
+while read entry; do
     tvarinit
     # write item into archive
     runtpl xhtml item

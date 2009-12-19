@@ -15,15 +15,17 @@ function car {
    subdir="$1"
    if [[ -z "$subdir" ]]; then
        target="\$(TMPDIR)"
-       ubertarget="echo archive:\$pages"
+       postlist="liveposts"
+       ubertarget="echo archive: $postlist\$pages"
    else
        target="\$(TMPDIR)/${subdir}"
-	    ubertarget="echo ${subdir}:\$pages \${target}/atom.xml"
+       postlist="${CFGDIR}/$subdir"
+	    ubertarget="echo ${subdir}: $postlist\$pages \${target}/atom.xml"
    fi
 	while [ $i -le ${pagecnt} ]; do
       # calculate range of items
-		lbound=$((i*${ITEMMAX}))
-		ubound=$((i*${ITEMMAX} +${ITEMMAX}-1))
+		lbound=$((i*${ITEMMAX}+1))
+		ubound=$((i*${ITEMMAX}+${ITEMMAX}))
 
       # set next page link
 		next=$((i+1))
@@ -44,26 +46,40 @@ function car {
 		fi
 
 		pages="$pages $target/${pagename}"
-		echo "$target/${pagename}: ${allposts[$lbound..$ubound]}"
+		echo "$target/${pagename}: \$(shell sed -n -e \"$lbound,$ubound p;$ubound q\" $postlist)"
    	echo "	@test -d \$(@D) || mkdir -p \$(@D)"
-		echo "	ksh bin/page \"${subdir}\" \"$prevpage\" \"$nextpage\" "'$^'" >\$@"
+	   echo "	sed -n -e \"$lbound,$ubound p;$ubound q\" $postlist | ksh bin/page \"${subdir}\" \"$prevpage\" \"$nextpage\" >\$@"
 		echo
 		i=$((i + 1))
 		pagename="page-$i.html"
 	done
-	echo "${target}/atom.xml: ${allposts[0 .. $ITEMMAX-1]}"
+	echo "${target}/atom.xml: \$(shell head -$ITEMMAX $postlist)"
    echo "	@test -d \$(@D) || mkdir -p \$(@D)"
-	echo "	ksh bin/atom \$^ >\$@"
+	echo "	head -$ITEMMAX $postlist | ksh bin/atom >\$@"
 	echo
    eval "$ubertarget"
 	echo
+}
+
+function postrules {
+    read tname
+    while true; do
+        read nextf || nextf=""
+	     print "\$(TMPDIR)/${tname}: ${tname}"
+        print "	@test -d \$(@D) || mkdir -p \$(@D)"
+	     print "	ksh bin/post \"${tname}\" \"$prevf\" \"$nextf\" >\$@\n"
+	     postpages="$postpages \$(TMPDIR)/${tname}"
+        [[ -z "$nextf" ]] && return
+        prevf="${tname}"
+        tname="${nextf}"
+    done
 }
 
 # reproduce header
 cp Makefile.in Makefile
 
 # create main index archive rules
-/bin/ls -t -x posts/*.html | car ""
+car "" <liveposts
 
 # create tag rules
 for tag in $(ls -x ${CFGDIR}/tags/); do
@@ -74,18 +90,9 @@ echo "tags: ${tags}"
 echo
 
 #	create individual posts rules
-i=0
-set -A files $(/bin/ls -t -x posts/*.html )
-while [ ${#files[@]} -gt $i ]; do
-	tname="${files[i]}"
-   if [[ $i -eq 0 ]]; then prevf=""
-   else prevf=${files[i-1]}; fi
-   if [[ $i -lt $((${#files[@]} -1)) ]]; then nextf=${files[i+1]}
-   else nextf=""; fi
-	print "\$(TMPDIR)/${tname}: ${files[i]}"
-   print "	@test -d \$(@D) || mkdir -p \$(@D)"
-	print "	ksh bin/post \"${files[i]}\" \"$prevf\" \"$nextf\" >\$@\n"
-	postpages="$postpages \$(TMPDIR)/${tname}"
-	i=$((i+1))
-done
+postrules <liveposts
+
 echo "posts:$postpages"
+
+echo "last: \$(TMPDIR)/$(head -1 liveposts)"
+echo "2nd: \$(TMPDIR)/$(sed -n -e '2p;2q' liveposts)"
