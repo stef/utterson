@@ -31,12 +31,12 @@ sitemap: $(TMPDIR)/sitemap.xml.gz
 static: layout/static/*
 	ksh bin/static $^
 
-Makefile: $(shell cat liveposts)
+Makefile: $(shell cat $(CFGDIR)/liveposts)
 	ksh bin/makemake >>$@
 
 clean:
 	rm $(TMPDIR)/index.html $(TMPDIR)/page-*.html $(TMPDIR)/atom.xml $(TMPDIR)/sitemap.xml.gz
-	rm -rf $(TMPDIR)/posts $(TMPDIR)/tags
+	rm -rf $(TMPDIR)/posts $(TMPDIR)/tags $(TMPDIR)/drafts
 
 make:
 	rm Makefile
@@ -45,10 +45,10 @@ make:
 install: all
 	rsync -vcaE -e ssh --delete $(TMPDIR)/* $(LIVESITE)
 
-$(TMPDIR)/sitemap.xml.gz: $(shell cat liveposts)
-	ksh bin/sitemap <liveposts | gzip -c >$@
+$(TMPDIR)/sitemap.xml.gz: $(shell cat $(CFGDIR)/liveposts)
+	ksh bin/sitemap <$(CFGDIR)/liveposts | gzip -c >$@
 
-liveposts:
+$(CFGDIR)/liveposts:
 	ls -t posts/*.html >$@
 
 .PHONY: all static make install clean atom sitemap tags

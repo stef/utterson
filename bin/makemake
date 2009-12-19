@@ -15,12 +15,12 @@ function car {
    subdir="$1"
    if [[ -z "$subdir" ]]; then
        target="\$(TMPDIR)"
-       postlist="liveposts"
-       ubertarget="echo archive: $postlist\$pages"
+       postlist="\$(CFGDIR)/liveposts"
+       ubertarget="echo archive: \$postlist\$pages"
    else
        target="\$(TMPDIR)/${subdir}"
-       postlist="${CFGDIR}/$subdir"
-	    ubertarget="echo ${subdir}: $postlist\$pages \${target}/atom.xml"
+       postlist="\$(CFGDIR)/$subdir"
+	    ubertarget="echo ${subdir}: \$postlist\$pages \${target}/atom.xml"
    fi
 	while [ $i -le ${pagecnt} ]; do
       # calculate range of items
@@ -69,7 +69,7 @@ function postrules {
         print "	@test -d \$(@D) || mkdir -p \$(@D)"
 	     print "	ksh bin/post \"${tname}\" \"$prevf\" \"$nextf\" >\$@\n"
 	     postpages="$postpages \$(TMPDIR)/${tname}"
-        [[ -z "$nextf" ]] && return
+        [[ -z "$nextf" ]] && break
         prevf="${tname}"
         tname="${nextf}"
     done
@@ -79,7 +79,7 @@ function postrules {
 cp Makefile.in Makefile
 
 # create main index archive rules
-car "" <liveposts
+car "" < "${CFGDIR}/liveposts"
 
 # create tag rules
 for tag in $(ls -x ${CFGDIR}/tags/); do
@@ -90,9 +90,23 @@ echo "tags: ${tags}"
 echo
 
 #	create individual posts rules
-postrules <liveposts
+postrules <${CFGDIR}/liveposts
 
 echo "posts:$postpages"
+echo
+echo "last: \$(TMPDIR)/$(head -1 ${CFGDIR}/liveposts)"
+echo
+echo "2nd: \$(TMPDIR)/$(sed -n -e '2p;2q' ${CFGDIR}/liveposts)"
+echo
 
-echo "last: \$(TMPDIR)/$(head -1 liveposts)"
-echo "2nd: \$(TMPDIR)/$(sed -n -e '2p;2q' liveposts)"
+# create rules for drafts
+(cat ${CFGDIR}/liveposts; cat ${CFGDIR}/liveposts; ls -t posts/*.html) |
+   sort |
+   uniq -u |
+   while read draft; do
+	    print "\$(TMPDIR)/drafts/${draft#posts/}: ${draft}"
+       print "	@test -d \$(@D) || mkdir -p \$(@D)"
+	    print "	ksh bin/post \"${draft}\" \"\" \"\" >\$@\n"
+	    drafts="$drafts \$(TMPDIR)/drafts/${draft#posts/}"
+   done
+echo "drafts: ${drafts}"

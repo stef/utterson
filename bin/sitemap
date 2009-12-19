@@ -18,8 +18,6 @@
 
 . ${0%%/*}/utterson.lib
 
-postslen=${#@}
-
 counter=0
 # start sitemap
 runtpl sitemap header
@@ -36,7 +34,7 @@ while read entry; do
 done
 
 # WRITE sitemap entry for index pages
-pagecnt=$(($postslen / $ITEMMAX ))
+pagecnt=$(($counter / $ITEMMAX ))
 i=0
 TVARS[CHANGEFREQ]="weekly"
 while [ $i -lt ${pagecnt} ]; do
