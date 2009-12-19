@@ -16,11 +16,11 @@ function car {
    if [[ -z "$subdir" ]]; then
        target="\$(TMPDIR)"
        postlist="\$(CFGDIR)/liveposts"
-       ubertarget="echo archive: \$postlist\$pages"
+       ubertarget="echo archive:\$pages"
    else
        target="\$(TMPDIR)/${subdir}"
        postlist="\$(CFGDIR)/$subdir"
-	    ubertarget="echo ${subdir}: \$postlist\$pages \${target}/atom.xml"
+	    ubertarget="echo ${subdir}:\$pages \${target}/atom.xml"
    fi
 	while [ $i -le ${pagecnt} ]; do
       # calculate range of items
@@ -46,14 +46,14 @@ function car {
 		fi
 
 		pages="$pages $target/${pagename}"
-		echo "$target/${pagename}: \$(shell sed -n -e \"$lbound,$ubound p;$ubound q\" $postlist)"
+		echo "$target/${pagename}: $postlist \$(shell sed -n -e \"$lbound,$ubound p;$ubound q\" $postlist 2>/dev/null)"
    	echo "	@test -d \$(@D) || mkdir -p \$(@D)"
-	   echo "	sed -n -e \"$lbound,$ubound p;$ubound q\" $postlist | ksh bin/page \"${subdir}\" \"$prevpage\" \"$nextpage\" >\$@"
+	   echo "	sed -n -e \"$lbound,$ubound p;$ubound q\" $postlist 2>/dev/null | ksh bin/page \"${subdir}\" \"$prevpage\" \"$nextpage\" >\$@"
 		echo
 		i=$((i + 1))
 		pagename="page-$i.html"
 	done
-	echo "${target}/atom.xml: \$(shell head -$ITEMMAX $postlist)"
+	echo "${target}/atom.xml: $postlist \$(shell head -$ITEMMAX $postlist 2>/dev/null)"
    echo "	@test -d \$(@D) || mkdir -p \$(@D)"
 	echo "	head -$ITEMMAX $postlist | ksh bin/atom >\$@"
 	echo
@@ -94,9 +94,9 @@ postrules <${CFGDIR}/liveposts
 
 echo "posts:$postpages"
 echo
-echo "last: \$(TMPDIR)/$(head -1 ${CFGDIR}/liveposts)"
+echo "last: \$(TMPDIR)/$(head -1 ${CFGDIR}/liveposts 2>/dev/null)"
 echo
-echo "2nd: \$(TMPDIR)/$(sed -n -e '2p;2q' ${CFGDIR}/liveposts)"
+echo "2nd: \$(TMPDIR)/$(sed -n -e '2p;2q' ${CFGDIR}/liveposts 2>/dev/null)"
 echo
 
 # create rules for drafts

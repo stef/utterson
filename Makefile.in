@@ -24,6 +24,11 @@ include cfg/make.cfg
 
 all: posts archive atom sitemap tags static
 
+make: Makefile
+
+install: all
+	rsync -vcaE -e ssh --delete $(TMPDIR)/* $(LIVESITE)
+
 atom: $(TMPDIR)/atom.xml
 
 sitemap: $(TMPDIR)/sitemap.xml.gz
@@ -31,25 +36,18 @@ sitemap: $(TMPDIR)/sitemap.xml.gz
 static: layout/static/*
 	ksh bin/static $^
 
-Makefile: $(shell cat $(CFGDIR)/liveposts)
-	ksh bin/makemake >>$@
-
 clean:
 	rm $(TMPDIR)/index.html $(TMPDIR)/page-*.html $(TMPDIR)/atom.xml $(TMPDIR)/sitemap.xml.gz
 	rm -rf $(TMPDIR)/posts $(TMPDIR)/tags $(TMPDIR)/drafts
 
-make:
-	rm Makefile
-	make -f Makefile.in Makefile
+Makefile: $(CFGDIR)/liveposts $(CFGDIR)/tags/* Makefile.in
+	ksh bin/makemake >>$@
 
-install: all
-	rsync -vcaE -e ssh --delete $(TMPDIR)/* $(LIVESITE)
-
-$(TMPDIR)/sitemap.xml.gz: $(shell cat $(CFGDIR)/liveposts)
-	ksh bin/sitemap <$(CFGDIR)/liveposts | gzip -c >$@
-
-$(CFGDIR)/liveposts:
+$(CFGDIR)/liveposts: $(shell ls -t posts/*.html)
 	ls -t posts/*.html >$@
+
+$(TMPDIR)/sitemap.xml.gz: $(CFGDIR)/liveposts $(shell cat $(CFGDIR)/liveposts 2>/dev/null)
+	ksh bin/sitemap <$(CFGDIR)/liveposts | gzip -c >$@
 
 .PHONY: all static make install clean atom sitemap tags
 
