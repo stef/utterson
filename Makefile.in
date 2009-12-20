@@ -24,7 +24,9 @@ include cfg/make.cfg
 
 all: posts archive atom sitemap tags static
 
-make: Makefile
+make: 
+	rm Makefile
+	make -f Makefile.in Makefile
 
 install: all
 	rsync -vcaE -e ssh --delete $(TMPDIR)/* $(LIVESITE)
