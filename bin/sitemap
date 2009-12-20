@@ -33,8 +33,10 @@ while read entry; do
     counter=$((counter + 1))
 done
 
+[[ $counter -eq 0 ]] && { echo "ERROR: no posts found" >&2; exit 1; }
+
 # WRITE sitemap entry for index pages
-pagecnt=$(($counter / $ITEMMAX ))
+pagecnt=$(( ($counter / $ITEMMAX) + 1 ))
 i=0
 TVARS[CHANGEFREQ]="weekly"
 while [ $i -lt ${pagecnt} ]; do

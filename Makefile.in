@@ -40,7 +40,7 @@ clean:
 	rm $(TMPDIR)/index.html $(TMPDIR)/page-*.html $(TMPDIR)/atom.xml $(TMPDIR)/sitemap.xml.gz
 	rm -rf $(TMPDIR)/posts $(TMPDIR)/tags $(TMPDIR)/drafts
 
-Makefile: $(CFGDIR)/liveposts $(CFGDIR)/tags/* Makefile.in bin/makemake $(shell ls -t posts/*.html)
+Makefile: $(CFGDIR)/liveposts $(shell ls $(CFGDIR)/tags/* 2>/dev/null) Makefile.in bin/makemake $(shell ls -t posts/*.html)
 	ksh bin/makemake >>$@
 
 liveposts:

@@ -83,7 +83,7 @@ cp Makefile.in Makefile
 car "" < "${CFGDIR}/liveposts"
 
 # create tag rules
-for tag in $(ls -x ${CFGDIR}/tags/); do
+for tag in $(ls -x ${CFGDIR}/tags/ 2>/dev/null); do
 	tags="$tags tags/${tag}"
    car "tags/$tag" <${CFGDIR}/tags/${tag}
 done
