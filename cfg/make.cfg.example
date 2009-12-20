@@ -1,2 +1,3 @@
 TMPDIR=blog
+CFGDIR=cfg
 LIVESITE=www.example.com:/home/joe/public_html/blog
