@@ -40,14 +40,18 @@ clean:
 	rm $(TMPDIR)/index.html $(TMPDIR)/page-*.html $(TMPDIR)/atom.xml $(TMPDIR)/sitemap.xml.gz
 	rm -rf $(TMPDIR)/posts $(TMPDIR)/tags $(TMPDIR)/drafts
 
-Makefile: $(CFGDIR)/liveposts $(CFGDIR)/tags/* Makefile.in
+Makefile: $(CFGDIR)/liveposts $(CFGDIR)/tags/* Makefile.in bin/makemake $(shell ls -t posts/*.html)
 	ksh bin/makemake >>$@
 
-$(CFGDIR)/liveposts: $(shell ls -t posts/*.html)
-	ls -t posts/*.html >$@
+liveposts:
+	ls -t posts/*.html >$(CFGDIR)/$@
 
 $(TMPDIR)/sitemap.xml.gz: $(CFGDIR)/liveposts $(shell cat $(CFGDIR)/liveposts 2>/dev/null)
 	ksh bin/sitemap <$(CFGDIR)/liveposts | gzip -c >$@
+
+last: $(TMPDIR)/$(shell head -1 $(CFGDIR)/liveposts 2>/dev/null)
+
+2nd: $(TMPDIR)/$(shell sed -n -e '2p;2q' $(CFGDIR)/liveposts 2>/dev/null)
 
 .PHONY: all static make install clean atom sitemap tags
 

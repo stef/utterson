@@ -15,11 +15,11 @@ function car {
    subdir="$1"
    if [[ -z "$subdir" ]]; then
        target="\$(TMPDIR)"
-       postlist="\$(CFGDIR)/liveposts"
+       postlist="liveposts"
        ubertarget="echo archive:\$pages"
    else
        target="\$(TMPDIR)/${subdir}"
-       postlist="\$(CFGDIR)/$subdir"
+       postlist="$subdir"
 	    ubertarget="echo ${subdir}:\$pages \${target}/atom.xml"
    fi
 	while [ $i -le ${pagecnt} ]; do
@@ -46,28 +46,29 @@ function car {
 		fi
 
 		pages="$pages $target/${pagename}"
-		echo "$target/${pagename}: $postlist \$(shell sed -n -e \"$lbound,$ubound p;$ubound q\" $postlist 2>/dev/null)"
+		echo "$target/${pagename}: \$(CFGDIR)/$postlist $(sed -n -e $lbound,${ubound}p';'${ubound}q ${CFGDIR}/$postlist 2>/dev/null | tr "\n" " ")"
    	echo "	@test -d \$(@D) || mkdir -p \$(@D)"
-	   echo "	sed -n -e \"$lbound,$ubound p;$ubound q\" $postlist 2>/dev/null | ksh bin/page \"${subdir}\" \"$prevpage\" \"$nextpage\" >\$@"
+	   echo "	sed -n -e \"$lbound,$ubound p;$ubound q\" \$(CFGDIR)/$postlist 2>/dev/null | ksh bin/page \"${subdir}\" \"$prevpage\" \"$nextpage\" >\$@"
 		echo
 		i=$((i + 1))
 		pagename="page-$i.html"
 	done
-	echo "${target}/atom.xml: $postlist \$(shell head -$ITEMMAX $postlist 2>/dev/null)"
+	echo "${target}/atom.xml: \$(CFGDIR)/$postlist $(head -$ITEMMAX ${CFGDIR}/$postlist 2>/dev/null | tr "\n" " ")"
    echo "	@test -d \$(@D) || mkdir -p \$(@D)"
-	echo "	head -$ITEMMAX $postlist | ksh bin/atom >\$@"
+	echo "	head -$ITEMMAX \$(CFGDIR)/$postlist | ksh bin/atom >\$@"
 	echo
    eval "$ubertarget"
 	echo
 }
 
+# this function creates rules for linked single page posts via stdin
 function postrules {
     read tname
     while true; do
         read nextf || nextf=""
 	     print "\$(TMPDIR)/${tname}: ${tname}"
         print "	@test -d \$(@D) || mkdir -p \$(@D)"
-	     print "	ksh bin/post \"${tname}\" \"$prevf\" \"$nextf\" >\$@\n"
+	     print "	ksh bin/post \$^ \"$prevf\" \"$nextf\" >\$@\n"
 	     postpages="$postpages \$(TMPDIR)/${tname}"
         [[ -z "$nextf" ]] && break
         prevf="${tname}"
@@ -86,17 +87,12 @@ for tag in $(ls -x ${CFGDIR}/tags/); do
 	tags="$tags tags/${tag}"
    car "tags/$tag" <${CFGDIR}/tags/${tag}
 done
-echo "tags: ${tags}"
+echo "tags:${tags}"
 echo
 
-#	create individual posts rules
+# create individual posts rules
 postrules <${CFGDIR}/liveposts
-
 echo "posts:$postpages"
-echo
-echo "last: \$(TMPDIR)/$(head -1 ${CFGDIR}/liveposts 2>/dev/null)"
-echo
-echo "2nd: \$(TMPDIR)/$(sed -n -e '2p;2q' ${CFGDIR}/liveposts 2>/dev/null)"
 echo
 
 # create rules for drafts
@@ -106,7 +102,7 @@ echo
    while read draft; do
 	    print "\$(TMPDIR)/drafts/${draft#posts/}: ${draft}"
        print "	@test -d \$(@D) || mkdir -p \$(@D)"
-	    print "	ksh bin/post \"${draft}\" \"\" \"\" >\$@\n"
+	    print "	ksh bin/post \$^ \"\" \"\" >\$@\n"
 	    drafts="$drafts \$(TMPDIR)/drafts/${draft#posts/}"
    done
-echo "drafts: ${drafts}"
+echo "drafts:${drafts}"
