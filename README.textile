@@ -69,7 +69,7 @@ If you only have one draft, then publishing it consists of only three steps:
 # run @make livepost all@ to generate a preview
 # run @make install@ to set the changes live.
 
-If you have multiple drafts, but do not want to publish all of them, you must add them manually to _cfg/liveposts_ instead of using make.
+At step (2) if you have multiple drafts, but do not want to publish all of them, you must add them manually to _cfg/liveposts_ instead of using make.
 
 h3. Templates
 
@@ -105,17 +105,14 @@ bc. ;; muse blog settings
   (flyspell-mode 1)
   )
 (add-hook 'muse-mode-hook 'my-muse-mode-hook)
-
 (defvar muse-my-xhtml-markup-strings
   (nconc
    '((image-with-desc . "<img class=\"alignright\" title=\"%3%\" src=\"%1%.%2%\" alt=\"%3%\" width=\"300\" />")
      muse-xhtml1.0-markup-regexps)))
-
 (muse-derive-style "just-body" "xhtml1.0"
                    :header ""
                    :strings 'muse-my-xhtml-markup-strings
                    :footer "")
-
 ;; credit: http://danamlund.dk/emacs/make-runner.html
 (defun my-get-makefile-targets (f)
   (with-temp-buffer
@@ -127,11 +124,9 @@ bc. ;; muse blog settings
                    (cons (match-string 1) (funcall v v))
                  '()))))
       (funcall v v))))
-
 (defvar my-make-last-target ""
   "holds the last target, and what is used if no input is given
   when doing my-make")
-
 (defun my-make ()
   "If no target is specified the last target will be used.
    To force running make without a target use the fake target \".\"."
@@ -146,7 +141,6 @@ bc. ;; muse blog settings
                          (t target))))
       (setq my-make-last-target target)
       (compile (concat "cd ..; make " target))))
-
 (defun my-muse-publish ()
   (interactive)
   (progn
@@ -160,7 +154,6 @@ bc. ;; muse blog settings
      )
     (my-make)
     ))
-
 ;; working on drafts
 (define-key muse-mode-map [f7] 'my-muse-publish)
 ;; working with the blog
