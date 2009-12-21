@@ -39,27 +39,47 @@ h3. Config
 
 The configuration of the blog can be found in _cfg/utterson.cfg_. The scripts search the current directory, ~/.config/utterson, /etc/utterson and the ../cfg directory relative to the location of the utterson shell scripts. Use this to adapt to your needs. For longer html snippets it's easier to put them into separate files under _cfg_/, and then set them in _utterson.cfg_ like this @TVARS[TRACKERCODE]="$(cat ${CFGDIR}/tracker.html)"@
 
-The _Makefile_ needs some path settings, these can be found in _cfg/make.cfg_, except for the upload destination for the live site, the defaults should work out of the box.
+The _Makefile_ needs some path settings, these can be set in _cfg/make.cfg_. Except for the upload destination for the live site, the defaults should work out of the box.
 
-_cfg_/*liveposts* - this file is important, it decides what will be rendered. It contains a list of all posts that have been published (included in the archive, sitemap, atomfeed). This file can be set to all html files in _posts_/ using @make liveposts@, for example if you want to add a new post.
+_cfg_/*liveposts* - this file is important, it controls what will be rendered. It contains a list of all posts that should be published (included in the archive, sitemap, atomfeed). This file can be set to all html files in _posts_/ using @make liveposts@, for example if you want to add everything in _posts_/.
 
 *Tags* are stored under cfg/tags/ each tag lists all posts in order - that means usually new posts go to the top of this file. The posts should also contain the 'post/' directory prefixed to the filename.
-
-h3. Templates
-
-If you want to change to look of the results, check the templates. These can be found in _layout_/. Here you can find the templates for the _headers_, _footers_, _single page rendering_ and _list rendering_ of posts for _xhtml_, _sitemap_ and _atom_ targets. Anything contained in the _layout/static_ directory will be directly copied to the results, this way you can distribute your css and image files for example.
 
 h3. Writing posts
 
 All input goes in _posts_/. You create here html files containing only the body of the posts. The publishing date will be taken from the files timestamp, while the post' title will be taken from the filename. Easy, yes?
 
+After putting your post in _posts_/, you can run @make drafts@, which will automatically detect the new file and renders it into your destination directory under _blog/drafts_/.
+
+Youtube and vimeo embedds are supported via shortcuts in utterson.lib/filter():
+* youtube: [youtube=http://www.youtube.com/watch?v=<id>]
+* vimeo: [vimeo=http://vimeo.com/<id>]
+* images with captions: [caption align="alignright|alignleft" caption="<caption>"]<image>[/caption]
+
 h3. Make blog
 
 When you have a proper makefile and you invoke the _all_ target, the blog will be generated into _blog_/. Since we're using make, only those files will be regenerated that have changed. E.g. when adding a new _post_, the _atom_, _sitemap_, _index_, some tags pages and the _archive_ pages will be regenarated to reflect this change. Unchanged posts are not regenerated, only the new post will be used to generate  the permalink endpoint of the post under _blog/posts_. The _all_ target takes care of the complete blog, so afterwards it should be safe to invoke the _install_ target as well, set the destination in _cfg/make.cfg_.
 
+If you want to publish your draft you need to prepend the name of the file to the _cfg/liveposts_ file. If you do not have other drafts, then @make liveposts@ automatically adds all HTML files in _posts_/ to _cfg/liveposts_.
+
+You might want to attach your new post to any tags under _cfg/tags_. After the update to your tags and _liveposts_ you should run @make all@, which should regenerate all the changed files.
+
+If you only have one draft, then publishing it consists of only three steps:
+# add the new post to any tags
+# run @make livepost all@ to generate a preview
+# run @make install@ to set the changes live.
+
+If you have multiple drafts, but do not want to publish all of them, you must add them manually to _cfg/liveposts_ instead of using make.
+
+h3. Templates
+
+If you want to change to look of the results, check the templates. These can be found in _layout_/. Here you can find the templates for the _headers_, _footers_, _single page rendering_ and _list rendering_ of posts for _xhtml_, _sitemap_ and _atom_ targets. Anything contained in the _layout/static_ directory will be directly copied to the results, this way you can distribute your css and image files for example.
+
 h3. Makefile
 
 Utterson is basically controlled by the makefile, if you don't have a makefile you should run @make -f Makefile.in Makefile@. You have common targets like _clean, make, all, posts, atom, sitemap, archive, tags, static. The _install_ target rsyncs your _blog_/ directory via ssh to the live site. You should edit the config variables on top of the _Makefile.in_ to set the destination of the _install_ target and regenerate your _Makefile_ to set up your own site.
+
+Sometimes it's useful to force a remake of the Makefile, easy: @make make@ should do the job.
 
 h3. Scripts
 
@@ -77,7 +97,7 @@ The helper scripts doing the main work are in the _bin_/ directory.
 * *mailhandler*: (*experimental*) converts an emailmsg to a file in posts/ (use with the supplied procmailrc for email support). see also next item. This script currently does not invoke the makefile to generate the new state of the blog. The workflow here is not quite clear yet.
 * *procmailrc*: (*experimental*) use this if utterson is installed on the live site to support mailing in blogposts.
 Only blogposts are accepted, if they are signed using pgp by anyone known in the public keyring (which of course you control). Easy and secure authentication of content. :) To sign a post is currently only supported using mutt, here's the macro from _my .muttrc_: @macro compose \CP "Fgpg --clearsign --default-key <insert your own key>\ny"@
-* emacs support: is due to some basic settings in init.el:
+* emacs support: super-comfortable automatic publishing from muse-mode and advanced make support is due to some basic settings in init.el:
 
 bc. ;; muse blog settings
 (defun my-muse-mode-hook ()
@@ -85,22 +105,63 @@ bc. ;; muse blog settings
   (flyspell-mode 1)
   )
 (add-hook 'muse-mode-hook 'my-muse-mode-hook)
+
 (defvar muse-my-xhtml-markup-strings
   (nconc
    '((image-with-desc . "<img class=\"alignright\" title=\"%3%\" src=\"%1%.%2%\" alt=\"%3%\" width=\"300\" />")
      muse-xhtml1.0-markup-regexps)))
+
 (muse-derive-style "just-body" "xhtml1.0"
                    :header ""
                    :strings 'muse-my-xhtml-markup-strings
                    :footer "")
+
+;; credit: http://danamlund.dk/emacs/make-runner.html
+(defun my-get-makefile-targets (f)
+  (with-temp-buffer
+    (insert-file f)
+    (end-of-buffer)
+    (let ((v (lambda (v)
+               (if (re-search-backward "^\\([^:\n#[:space:]]+?\\):"
+                                       (not 'bound) 'noerror)
+                   (cons (match-string 1) (funcall v v))
+                 '()))))
+      (funcall v v))))
+
+(defvar my-make-last-target ""
+  "holds the last target, and what is used if no input is given
+  when doing my-make")
+
+(defun my-make ()
+  "If no target is specified the last target will be used.
+   To force running make without a target use the fake target \".\"."
+  (interactive)
+    (let* ((targets (my-get-makefile-targets "../Makefile"))
+           (prompt (if (string= "" my-make-last-target)
+                       "Target: "
+                     (concat "Target (" my-make-last-target "): ")))
+           (target (completing-read prompt targets nil nil))
+           (target (cond ((string= "" target) my-make-last-target)
+                         ((string= "." target) "")
+                         (t target))))
+      (setq my-make-last-target target)
+      (compile (concat "cd ..; make " target))))
+
 (defun my-muse-publish ()
   (interactive)
-  (muse-publish-file
-   (buffer-file-name)
-   "just-body"
-   (expand-file-name
-    (concat
-     (file-name-directory buffer-file-name)
-     "../posts/"))
-   ))
+  (progn
+    (muse-publish-file
+     (buffer-file-name)
+     "just-body"
+     (expand-file-name
+      (concat
+       (file-name-directory buffer-file-name)
+       "../posts/"))
+     )
+    (my-make)
+    ))
+
+;; working on drafts
 (define-key muse-mode-map [f7] 'my-muse-publish)
+;; working with the blog
+(define-key muse-mode-map [f8] 'my-make)
