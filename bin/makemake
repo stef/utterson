@@ -64,15 +64,21 @@ function car {
 # this function creates rules for linked single page posts via stdin
 function postrules {
     read tname
+    i=1
     while true; do
         read nextf || nextf=""
-	     print "\$(TMPDIR)/${tname}: ${tname}"
+        if [[ $i -eq 2 ]]; then
+	         print "\$(TMPDIR)/${tname}: \$(CFGDIR)/liveposts ${tname}"
+        else
+	         print "\$(TMPDIR)/${tname}: ${tname}"
+        fi
         print "	@test -d \$(@D) || mkdir -p \$(@D)"
 	     print "	ksh bin/post \$^ \"$prevf\" \"$nextf\" >\$@\n"
 	     postpages="$postpages \$(TMPDIR)/${tname}"
         [[ -z "$nextf" ]] && break
         prevf="${tname}"
         tname="${nextf}"
+        [[ $i -lt 3 ]] && i=$((i+1))
     done
 }
 
