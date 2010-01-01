@@ -17,10 +17,6 @@
 # (C) 2009 by Stefan Marsiske, <stefan.marsiske@gmail.com>
 
 . ${0%%/*}/utterson.lib
+[[ ${#} -ne 2 ]] && exit 1
 
-########### start processing #############
-
-for file; do
-    TVARS[POSTURL]="${file##*/}"
-    runtpl static "${file##*/}" >"${TMPDIR}/${file##*/}"
-done
+runtpl "$1" "$2"

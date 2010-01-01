@@ -93,12 +93,12 @@ for tag in $(ls -x ${CFGDIR}/tags/ 2>/dev/null); do
 	tags="$tags tags/${tag}"
    car "tags/$tag" <${CFGDIR}/tags/${tag}
 done
-echo "tags:${tags}"
+echo "tags:${tags} \$(TMPDIR)/tags/index.html"
 echo
 
 # create individual posts rules
 postrules <${CFGDIR}/liveposts
-echo "posts:$postpages"
+echo "posts:$postpages \$(TMPDIR)/posts/index.html"
 echo
 
 # create rules for drafts

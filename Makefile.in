@@ -29,7 +29,7 @@ make:
 	make -f Makefile.in Makefile
 
 install: all
-	rsync -vcaE -e ssh --delete $(TMPDIR)/* $(LIVESITE)
+	rsync -vcaE -e ssh --delete --exclude drafts/ $(TMPDIR)/* $(LIVESITE)
 
 atom: $(TMPDIR)/atom.xml
 
@@ -54,6 +54,9 @@ $(TMPDIR)/sitemap.xml.gz: $(CFGDIR)/liveposts $(shell cat $(CFGDIR)/liveposts 2>
 last: $(TMPDIR)/$(shell head -1 $(CFGDIR)/liveposts 2>/dev/null)
 
 2nd: $(TMPDIR)/$(shell sed -n -e '2p;2q' $(CFGDIR)/liveposts 2>/dev/null)
+
+$(TMPDIR)/tags/index.html $(TMPDIR)/posts/index.html: layout/xhtml/redir
+	ksh bin/tpl xhtml redir >$@
 
 .PHONY: all static make install clean atom sitemap tags
 
