@@ -20,11 +20,11 @@
    <h1><a href="BASEURL/" title="Link to top level"><img src="BLOGLOGO" style="height: 70px; vertical-align: middle;" alt="logo" />BLOGTITLE</a></h1>
 <ul id="tnav">
  MAINMENU
- <li><form action="http://www.google.com/search" method="get" style="margin-left: 2em;">
+ <li><form name="searchbox" action="http://www.google.com/search" method="get" style="margin-left: 2em;">
     <div>
        <input type="hidden" name="sitesearch" value="SEARCHSITE" />
        <input class="search" maxlength="256" size="20" name="q" />
-       <a href="javascript:document.searchbox.submit()" 
+       <a href="javascript:document.searchbox.submit()"
           onclick="document.searchbox.q.value+=' inurl:SEARCHPATH'; return true; ">
           <img src="images/srch.gif" alt="search" />
        </a>
