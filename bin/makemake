@@ -1,4 +1,20 @@
 #!/bin/ksh
+#    This file is part of utterson.
+
+#    utterson is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    utterson is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with utterson.  If not, see <http://www.gnu.org/licenses/>.
+#
+# (C) 2009 by Stefan Marsiske, <stefan.marsiske@gmail.com>
 
 . ${0%%/*}/utterson.lib
 
@@ -69,11 +85,13 @@ function postrules {
         read nextf || nextf=""
         if [[ $i -eq 2 ]]; then
 	         print "\$(TMPDIR)/${tname}: \$(CFGDIR)/liveposts ${tname}"
+            print "	@test -d \$(@D) || mkdir -p \$(@D)"
+	         print "	ksh bin/post \"$tname\" \"$prevf\" \"$nextf\" >\$@\n"
         else
 	         print "\$(TMPDIR)/${tname}: ${tname}"
+            print "	@test -d \$(@D) || mkdir -p \$(@D)"
+	         print "	ksh bin/post \$^ \"$prevf\" \"$nextf\" >\$@\n"
         fi
-        print "	@test -d \$(@D) || mkdir -p \$(@D)"
-	     print "	ksh bin/post \$^ \"$prevf\" \"$nextf\" >\$@\n"
 	     postpages="$postpages \$(TMPDIR)/${tname}"
         [[ -z "$nextf" ]] && break
         prevf="${tname}"
