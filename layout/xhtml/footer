@@ -2,10 +2,12 @@
 </div>
 <br style="clear: both;" />
 NEWERPOSTS OLDERPOSTS 
-<hr />
+<br style="clear: both;" />
 <div style="text-align: center">
-    <a class="inline-button grey" href="http://creativecommons.org/licenses/by-sa/3.0/"><em>CC</em><span> BY-SA</span></a>
+    <a class="inline-button green" href="http://creativecommons.org/licenses/by-sa/3.0/"><em>CC</em><span> BY-SA</span></a>
     <a class="inline-button orange" href="ATOMFEED"><em>RSS</em><span> Export</span></a>
+    <br style="clear: both;" />
+    Proudly powered by <a href="http://github.com/stef/utterson">Utterson</a>
 </div>
 TRACKERCODE
 </body></html>
