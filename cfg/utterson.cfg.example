@@ -31,7 +31,7 @@ TVARS[SEARCHPATH]="$(echo ${TVARS[BASEURL]} | cut -d/ -f4-)"
 ### system config
 BASEDIR="${PWD}"
 ITEMMAX=15
-TMPDIR="$BASEDIR/tmp" # must exist!
+TMPDIR="$BASEDIR/blog" # must exist!
 ATOMFILE="atom.xml"
 HTMLFILE="index.html"
 SITEMAPFILE="sitemap.xml"
