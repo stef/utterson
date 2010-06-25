@@ -29,10 +29,10 @@ TVARS[SEARCHSITE]="$(echo ${TVARS[BASEURL]} | cut -d/ -f3)"
 TVARS[SEARCHPATH]="$(echo ${TVARS[BASEURL]} | cut -d/ -f4-)"
 
 ### system config
-BASEDIR=$HOME/blog
+BASEDIR="${PWD}"
 ITEMMAX=15
 TMPDIR="$BASEDIR/tmp" # must exist!
 ATOMFILE="atom.xml"
 HTMLFILE="index.html"
 SITEMAPFILE="sitemap.xml"
-BASEURL=${TVARS[BASEURL]}
+BASEURL="${TVARS[BASEURL]}"
