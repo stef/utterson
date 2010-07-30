@@ -8,6 +8,7 @@ TVARS[BLOGTITLE]="~user1/blog/"
 TVARS[BLOGLOGO]="/~user1/logo.png"
 # url to the favicon (png)
 TVARS[FAVICON]="/~user1/favicon.png"
+TVARS[ATOMFEED]="$BASEURL/atom.xml"
 # META INFORMATION
 TVARS[BLOGDESC]="short blog description."
 TVARS[SUBJECT]="some tags"
