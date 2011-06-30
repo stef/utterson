@@ -60,6 +60,6 @@ img.ad{float:left;}
 .grey {background:gray;color:white}
 .grey em {background:white;color:gray}
 
-input.search {background:transparent url(/~stef/blog/images/srch_bg.gif) no-repeat scroll left top;border:0pt none;color:#000000;display:block;float:left;height:17px;padding:2px 1px 1px 8px;width:123px;}
+input.search {background:transparent url(images/srch_bg.gif) no-repeat scroll left top;border:0pt none;color:#000000;display:block;float:left;height:17px;padding:2px 1px 1px 8px;width:123px;}
 ul,ol{margin-left: 20px;}
 .entry-content{text-align: justify;};
